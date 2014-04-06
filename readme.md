@@ -1,16 +1,16 @@
-# Images
+# Gravatar
 
-Simple image storage for [Nette Framework](http://nette.org/)
+Simple gravatar creator for [Nette Framework](http://nette.org/)
 
 ## Instalation
 
-The best way to install ipub/images is using  [Composer](http://getcomposer.org/):
+The best way to install ipub/gravatar is using  [Composer](http://getcomposer.org/):
 
 
 ```json
 {
 	"require": {
-		"ipub/images": "dev-master"
+		"ipub/gravatar": "dev-master"
 	}
 }
 ```
@@ -19,10 +19,10 @@ After that you have to register extension in config.neon.
 
 ```neon
 extensions:
-	images: IPub\Images\DI\ImagesExtension
+	gravatar: IPub\Gravatar\DI\GravatarExtension
 ```
 
-Package contains trait, which you will have to use in class, where you want to use image storage. This works only for PHP 5.4+, for older version you can simply copy trait content and paste it into class where you want to use it.
+Package contains trait, which you will have to use in class, where you want to use gravatar creator. This works only for PHP 5.4+, for older version you can simply copy trait content and paste it into class where you want to use it.
 
 ```php
 <?php
@@ -30,48 +30,51 @@ Package contains trait, which you will have to use in class, where you want to u
 class BasePresenter extends Nette\Application\UI\Presenter
 {
 
-	use IPub\Images\TImagePipe;
+	use IPub\Gravatar\TGravatar;
 
+}
+```
+
+You have to add few lines in base presenter or base control in section createTemplate
+
+```php
+<?php
+
+class BasePresenter extends Nette\Application\UI\Presenter
+{
+	protected function createTemplate($class = NULL)
+	{
+		// Init template
+		$template = parent::createTemplate($class);
+
+		// Add gravatar to template
+		$template->_gravatar = $this->gravatar;
+		// Register template helpers
+		$template->registerHelperLoader(callback($this->gravatar->createTemplateHelpers(), 'loader'));
+
+		return $template;
+	}
 }
 ```
 
 ## Usage
 
-### Saving images
-
-In Form\Control\Presenter
-
-```php
-
-	/**
-	 * @inject
-	 * @var IPub\Images\ImageStorage
-	 */
-	public $storage;
-
-
-	public function handleUpload(Nette\Http\FileUpload $file)
-	{
-		$this->storage->upload($fileUpload); // saves to %wwwDir%/media/original/filename.jpg
-
-		# or
-
-		$this->storage->setNamespace("products")->upload($fileUpload); // saves to %wwwDir%/media/products/original/filename.jpg
-	}
-```
-
 ### Using in Latte
 
 ```html
-<a href="{img products/filename.jpg}"><img n:img="filename.jpg, 200x200, fill" /></a>
+<img n:gravatar="john@doe.com, 100" />
 ```
 
 output:
 
 ```html
-<a href="/media/products/original/filename.jpg"><img n:img="/media/200x200_fill/filename.jpg" /></a>
+<img src="http://www.gravatar.com/avatar/b530fd3b225b17f5f7e701283e710a6e?s=120&r=g&d=mm" />
 ```
 
-### Resizing flags
+### Extension params
 
-For resizing (third argument) you can use these keywords - `fit`, `fill`, `exact`, `stretch`, `shrink_only`. For details see comments above [these constants](http://api.nette.org/2.0/source-common.Image.php.html#105)
+```php
+	# Gravatar displaying
+	gravatar:
+		defaultImage	: mm
+```
