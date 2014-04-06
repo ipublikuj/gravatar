@@ -15,6 +15,13 @@ The best way to install ipub/gravatar is using  [Composer](http://getcomposer.or
 }
 ```
 
+or
+
+
+```json
+$ composer require ipub/gravatar:@dev
+```
+
 After that you have to register extension in config.neon.
 
 ```neon
