@@ -18,7 +18,7 @@ The best way to install ipub/gravatar is using  [Composer](http://getcomposer.or
 or
 
 
-```json
+```sh
 $ composer require ipub/gravatar:@dev
 ```
 
