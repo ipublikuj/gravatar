@@ -1,0 +1,31 @@
+{
+	"name"			: "ipub/gravatar",
+	"type"			: "library",
+	"description"	: "Gravatar creator for Nette Framework",
+	"keywords"		: ["nette", "gravatar", "tools"],
+	"homepage"		: "https://github.com/iPublikuj/gravatar.git",
+	"license"		: ["BSD-3-Clause", "GPL-2.0", "GPL-3.0"],
+
+	"authors"		: [
+		{
+			"name"		: "Adam Kadlec",
+			"homepage"	: "http://www.ipublikuj.eu/"
+		}
+	],
+
+	"support": {
+		"email"		:"support@ipublikuj.eu",
+		"issues"	:"https://github.com/iPublikuj/Gravatar/issues"
+	},
+
+	"require": {
+		"php"			: ">=5.3.2",
+		"nette/nette"	: "*"
+	},
+
+	"autoload": {
+		"psr-0": {
+			"IPub\\Gravatar\\": "src/"
+		}
+	}
+}
