@@ -21,7 +21,7 @@ trait TGravatar
 	/**
 	 * @var Gravatar
 	 */
-	public $gravatar;
+	protected $gravatar;
 
 	/**
 	 * @param Gravatar $gravatar

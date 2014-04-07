@@ -19,7 +19,7 @@ use Nette\Latte\Compiler,
 	Nette\Latte\MacroNode,
 	Nette\Latte\PhpWriter;
 
-use IPub\Images\ImagePipe;
+use IPub\Gravatar\Gravatar;
 
 class Macros extends Nette\Latte\Macros\MacroSet
 {
@@ -119,13 +119,13 @@ class Macros extends Nette\Latte\Macros\MacroSet
 	{
 		$params = $template->getParameters();
 
-		if (!isset($params['_imagePipe']) || !$params['_imagePipe'] instanceof ImagePipe) {
+		if (!isset($params['_gravatar']) || !$params['_gravatar'] instanceof Gravatar) {
 			$where = isset($params['control']) ?
 				" of component " . get_class($params['control']) . '(' . $params['control']->getName() . ')'
 				: NULL;
 
 			throw new Nette\InvalidStateException(
-				'Please provide an instanceof IPub\\Images\\ImagePipe ' .
+				'Please provide an instanceof IPub\\Gravatar\\Gravatar ' .
 				'as a parameter $_gravatar to template' . $where
 			);
 		}

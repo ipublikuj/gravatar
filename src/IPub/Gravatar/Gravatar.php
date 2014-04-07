@@ -371,49 +371,46 @@ class Gravatar extends \Nette\Object
 	 */
 	public function buildUrl()
 	{
-		// Start building the URL, and deciding if we're doing this via HTTPS or HTTP.
-		if ( $this->useSecureUrl ) {
-			$url = static::HTTPS_URL;
-
-		} else {
-			$url = static::HTTP_URL;
-		}
-
 		// Tack the email hash onto the end.
 		if ( $this->hashEmail == TRUE && !empty($this->email) ) {
-			$url .= $this->getEmailHash();
+			$emailHash = $this->getEmailHash();
 
 		} else if ( !empty($this->email) ) {
-			$url .= $this->email;
+			$emailHash = $this->email;
 
 		} else {
-			$url .= str_repeat('0', 32);
+			$emailHash = str_repeat('0', 32);
+		}
+
+		// Start building the URL, and deciding if we're doing this via HTTPS or HTTP.
+		if ( $this->useSecureUrl ) {
+			$url = new Nette\Http\Url(static::HTTPS_URL . $emailHash);
+
+		} else {
+			$url = new Nette\Http\Url(static::HTTP_URL . $emailHash);
 		}
 
 		// Check to see if the paramCache property has been populated yet
 		if ( $this->paramCache === NULL ) {
 			// Time to figure out our request params
 			$params = array();
-			$params[] = 's=' . $this->getSize();
-			$params[] = 'r=' . $this->getMaxRating();
+			$params['s'] = $this->getSize();
+			$params['r'] = $this->getMaxRating();
 
 			if ( $this->getDefaultImage() ) {
-				$params[] = 'd=' . $this->getDefaultImage();
+				$params['d'] = $this->getDefaultImage();
 			}
 
 			// Stuff the request params into the paramCache property for later reuse
-			$this->paramCache = (!empty($params)) ? '?' . implode('&', $params) : '';
+			$this->paramCache = !empty($params) ? $params : NULL;
 		}
 
-		// Handle "NULL" gravatar requests.
-		$tail = '';
-
 		if ( empty($this->email) ) {
-			$tail = !empty($this->paramCache) ? '&f=y' : '?f=y';
+			$this->paramCache['f'] = 'y';
 		}
 
 		// And we're done.
-		return $url . $this->paramCache . $tail;
+		return $url->appendQuery($$this->paramCache)->getAbsoluteUrl();
 	}
 
 	/**
