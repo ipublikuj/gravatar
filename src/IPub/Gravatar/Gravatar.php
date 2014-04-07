@@ -35,13 +35,6 @@ class Gravatar extends \Nette\Object
 	protected $expiration = 172800; // two days
 
 	/**
-	 * Email for gravatar creation
-	 *
-	 * @var string
-	 */
-	protected $email = NULL;
-
-	/**
 	 * The size to use for avatars.
 	 *
 	 * @var int
@@ -71,13 +64,6 @@ class Gravatar extends \Nette\Object
 	protected $useSecureUrl = FALSE;
 
 	/**
-	 * A temporary internal cache of the URL parameters to use
-	 *
-	 * @var string
-	 */
-	protected $paramCache = NULL;
-
-	/**
 	 * @var string|Image
 	 */
 	protected $image;
@@ -101,43 +87,16 @@ class Gravatar extends \Nette\Object
 	}
 
 	/**
-	 * @param string $email
-	 *
-	 * @return $this
-	 *
-	 * @throws InvalidArgumentException
-	 */
-	public function setEmail($email)
-	{
-		if (!Validators::isEmail($email)) {
-			throw new InvalidArgumentException('Inserted email is not valid email address');
-		}
-
-		// Wipe out the param cache.
-		$this->paramCache = NULL;
-
-		$this->email = (string) $email;
-
-		return $this;
-	}
-
-	/**
-	 * @return null|string
-	 */
-	public function getEmail()
-	{
-		return $this->email;
-	}
-
-	/**
 	 * Get the email hash to use (after cleaning the string)
 	 *
+	 * @param string $email
+	 * 
 	 * @return string - The hashed form of the email, post cleaning
 	 */
-	public function getEmailHash()
+	public function getEmailHash($email)
 	{
 		// Using md5 as per gravatar docs.
-		return hash('md5', strtolower(trim($this->email)));
+		return hash('md5', strtolower(trim($email)));
 	}
 
 	/**
@@ -155,9 +114,6 @@ class Gravatar extends \Nette\Object
 		if ( !$size ) {
 			return $this;
 		}
-
-		// Wipe out the param cache.
-		$this->paramCache = NULL;
 
 		if (!is_int($size) && !ctype_digit($size)) {
 			throw new InvalidArgumentException('Avatar size specified must be an integer');
@@ -214,9 +170,6 @@ class Gravatar extends \Nette\Object
 			return $this;
 		}
 
-		// Wipe out the param cache.
-		$this->paramCache = NULL;
-
 		// Check $image against recognized gravatar "defaults", and if it doesn't match any of those we need to see if it is a valid URL.
 		$_image = strtolower($image);
 		$valid_defaults = array('404' => 1, 'mm' => 1, 'identicon' => 1, 'monsterid' => 1, 'wavatar' => 1, 'retro' => 1);
@@ -257,9 +210,6 @@ class Gravatar extends \Nette\Object
 	 */
 	public function setMaxRating($rating)
 	{
-		// Wipe out the param cache.
-		$this->paramCache = NULL;
-
 		$rating = strtolower($rating);
 		$valid_ratings = array('g' => 1, 'pg' => 1, 'r' => 1, 'x' => 1);
 		
@@ -339,19 +289,32 @@ class Gravatar extends \Nette\Object
 	/**
 	 * Create gravatar image
 	 *
+	 * @param string|null $email
+	 * @param int|null $size
+	 *
 	 * @return Image
+	 *
+	 * @throws \Nette\InvalidArgumentException
 	 */
-	public function get()
+	public function get($email = NULL, $size = NULL)
 	{
-		$file = TEMP_DIR . DS .'cache'. DS .'_Gravatar.Images'. DS . $this->getEmailHash($this->email) . '_' . $this->size . '.jpeg';
+		// Set user email address
+		if ($email !== NULL && !Validators::isEmail($email)) {
+			throw new InvalidArgumentException('Inserted email is not valid email address');
+		}
+
+		// Set gravatar size
+		$this->setSize($size);
+
+		$file = TEMP_DIR . DIRECTORY_SEPARATOR .'cache'. DIRECTORY_SEPARATOR .'_Gravatar.Images'. DIRECTORY_SEPARATOR . $this->getEmailHash($email) . '_' . $this->size . '.jpeg';
 
 		if ( !file_exists($file) || filemtime($file) < time() - $this->expiration ) {
-			if ( !file_exists(TEMP_DIR . DS .'cache'. DS .'_Gravatar.Images') ) {
-				mkdir(TEMP_DIR . DS .'cache'. DS .'_Gravatar.Images');
+			if ( !file_exists(TEMP_DIR . DIRECTORY_SEPARATOR .'cache'. DIRECTORY_SEPARATOR .'_Gravatar.Images') ) {
+				mkdir(TEMP_DIR . DIRECTORY_SEPARATOR .'cache'. DIRECTORY_SEPARATOR .'_Gravatar.Images');
 			}
 
 			// Get gravatar content
-			$img = @file_get_contents($this->buildUrl());
+			$img = @file_get_contents($this->buildUrl($email));
 
 			if ( $img != NULL ) {
 				file_put_contents($file, $img);
@@ -367,16 +330,29 @@ class Gravatar extends \Nette\Object
 	/**
 	 * Build the avatar URL based on the provided email address
 	 *
+	 * @param string|null $email
+	 * @param int|null $size
+	 *
 	 * @return string
+	 * 
+	 * @throws \Nette\InvalidArgumentException
 	 */
-	public function buildUrl()
+	public function buildUrl($email = NULL, $size = NULL)
 	{
-		// Tack the email hash onto the end.
-		if ( $this->hashEmail == TRUE && !empty($this->email) ) {
-			$emailHash = $this->getEmailHash();
+		// Set user email address
+		if ($email !== NULL && !Validators::isEmail($email)) {
+			throw new InvalidArgumentException('Inserted email is not valid email address');
+		}
 
-		} else if ( !empty($this->email) ) {
-			$emailHash = $this->email;
+		// Set gravatar size
+		$this->setSize($size);
+
+		// Tack the email hash onto the end.
+		if ( $this->hashEmail == TRUE && $email !== NULL ) {
+			$emailHash = $this->getEmailHash($email);
+
+		} else if ( $email !== NULL ) {
+			$emailHash = $email;
 
 		} else {
 			$emailHash = str_repeat('0', 32);
@@ -390,27 +366,21 @@ class Gravatar extends \Nette\Object
 			$url = new Nette\Http\Url(static::HTTP_URL . $emailHash);
 		}
 
-		// Check to see if the paramCache property has been populated yet
-		if ( $this->paramCache === NULL ) {
-			// Time to figure out our request params
-			$params = array();
-			$params['s'] = $this->getSize();
-			$params['r'] = $this->getMaxRating();
+		// Time to figure out our request params
+		$params = array();
+		$params['s'] = $this->getSize();
+		$params['r'] = $this->getMaxRating();
 
-			if ( $this->getDefaultImage() ) {
-				$params['d'] = $this->getDefaultImage();
-			}
-
-			// Stuff the request params into the paramCache property for later reuse
-			$this->paramCache = !empty($params) ? $params : NULL;
+		if ( $this->getDefaultImage() ) {
+			$params['d'] = $this->getDefaultImage();
 		}
 
-		if ( empty($this->email) ) {
-			$this->paramCache['f'] = 'y';
+		if ( $email === NULL ) {
+			$params['f'] = 'y';
 		}
 
 		// And we're done.
-		return $url->appendQuery($$this->paramCache)->getAbsoluteUrl();
+		return $url->appendQuery($params)->getAbsoluteUrl();
 	}
 
 	/**

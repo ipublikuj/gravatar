@@ -62,7 +62,7 @@ class Macros extends Nette\Latte\Macros\MacroSet
 			throw new Nette\Latte\CompileException("Please provide email address.");
 		}
 
-		return $writer->write('echo %escape($_gravatar->setEmail('. $arguments['email'] .')->setSize('. $arguments['size'] .')->buildUrl())');
+		return $writer->write('echo %escape($_gravatar->buildUrl('. $arguments['email'] .', '. $arguments['size'] .'))');
 	}
 
 	/**
@@ -82,7 +82,7 @@ class Macros extends Nette\Latte\Macros\MacroSet
 			throw new Nette\Latte\CompileException("Please provide email address.");
 		}
 
-		return $writer->write('?> '. ($node->htmlNode->name === 'a' ? 'href' : 'src') .'="<?php echo %escape($_gravatar->setEmail('. $arguments['email'] .')->setSize('. $arguments['size'] .')->buildUrl())?>" <?php');
+		return $writer->write('?> '. ($node->htmlNode->name === 'a' ? 'href' : 'src') .'="<?php echo %escape($_gravatar->buildUrl('. $arguments['email'] .', '. $arguments['size'] .'))?>" <?php');
 	}
 
 	/**

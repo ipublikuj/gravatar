@@ -40,8 +40,6 @@ class Helpers extends Nette\Object
 	public function gravatar($email, $size = NULL)
 	{
 		return $this->gravatar
-			->setEmail($email)
-			->setSize($size)
-			->buildUrl();
+			->buildUrl($email, $size);
 	}
 }
