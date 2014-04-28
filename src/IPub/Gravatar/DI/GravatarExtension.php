@@ -49,7 +49,7 @@ class GravatarExtension extends Nette\DI\CompilerExtension
 		// Install extension latte macros
 		$install = 'IPub\Gravatar\Latte\Macros::install';
 		$container->getDefinition('nette.latte')
-			->addSetup($install . '(?->compiler)', array('@self'));
+			->addSetup($install . '(?->getCompiler())', array('@self'));
 
 		$gravatar = $container->addDefinition($this->prefix('gravatar'))
 			->setClass('IPub\Gravatar\Gravatar')
