@@ -14,6 +14,7 @@
 
 namespace IPub\Gravatar\Latte;
 
+use Latte\Template;
 use Nette;
 use Nette\Latte\Compiler,
 	Nette\Latte\MacroNode,
@@ -111,18 +112,27 @@ class Macros extends Nette\Latte\Macros\MacroSet
 	}
 
 	/**
-	 * @param \Nette\Templating\Template $template
-	 *
 	 * @throws \Nette\InvalidStateException
 	 */
-	public static function validateTemplateParams(Nette\Templating\Template $template)
+	public static function validateTemplateParams($template)
 	{
-		$params = $template->getParameters();
+		if ($template instanceof Nette\Templating\Template) {
+			$params = $template->getParameters();
+
+		} elseif ($template instanceof Nette\Bridges\ApplicationLatte\Template) {
+			$params = $template->getParameters();
+
+		} elseif ($template instanceof Template) {
+			$params = $template->getParameters();
+
+		} else {
+			throw new \InvalidArgumentException('Expected instanceof Template, ' . get_class($template) . ' given.');
+		}
+
+		/** @var \Nette\Application\UI\Control[]|string[] $params */
 
 		if (!isset($params['_gravatar']) || !$params['_gravatar'] instanceof Gravatar) {
-			$where = isset($params['control']) ?
-				" of component " . get_class($params['control']) . '(' . $params['control']->getName() . ')'
-				: NULL;
+			$where = isset($params['control']) ? " of component " . get_class($params['control']) . '(' . $params['control']->getName() . ')' : NULL;
 
 			throw new Nette\InvalidStateException(
 				'Please provide an instanceof IPub\\Gravatar\\Gravatar ' .
