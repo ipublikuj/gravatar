@@ -14,14 +14,18 @@
 
 namespace IPub\Gravatar\Latte;
 
-use Nette;
-use Nette\Latte\Compiler,
-	Nette\Latte\MacroNode,
-	Nette\Latte\PhpWriter;
-
+use Latte\CompileException;
+use Latte\Compiler;
+use Latte\MacroNode;
+use Latte\Macros\MacroSet;
+use Latte\PhpWriter;
+use Latte\Template;
+use Nette;;
 use IPub\Gravatar\Gravatar;
 
-class Macros extends Nette\Latte\Macros\MacroSet
+
+
+class Macros extends MacroSet
 {
 	/**
 	 * @var bool
@@ -48,10 +52,8 @@ class Macros extends Nette\Latte\Macros\MacroSet
 	/**
 	 * @param MacroNode $node
 	 * @param PhpWriter $writer
-	 *
+	 * @throws CompileException
 	 * @return string
-	 *
-	 * @throws \Nette\Latte\CompileException
 	 */
 	public function macroGravatar(MacroNode $node, PhpWriter $writer)
 	{
@@ -59,7 +61,7 @@ class Macros extends Nette\Latte\Macros\MacroSet
 		$arguments = self::prepareMacroArguments($node->args);
 
 		if ($arguments["email"] === NULL) {
-			throw new Nette\Latte\CompileException("Please provide email address.");
+			throw new CompileException("Please provide email address.");
 		}
 
 		return $writer->write('echo %escape($_gravatar->buildUrl('. $arguments['email'] .', '. $arguments['size'] .'))');
@@ -68,10 +70,8 @@ class Macros extends Nette\Latte\Macros\MacroSet
 	/**
 	 * @param MacroNode $node
 	 * @param PhpWriter $writer
-	 *
+	 * @throws CompileException
 	 * @return string
-	 *
-	 * @throws Nette\Latte\CompileException
 	 */
 	public function macroAttrGravatar(MacroNode $node, PhpWriter $writer)
 	{
@@ -79,7 +79,7 @@ class Macros extends Nette\Latte\Macros\MacroSet
 		$arguments = self::prepareMacroArguments($node->args);
 
 		if ($arguments["email"] === NULL) {
-			throw new Nette\Latte\CompileException("Please provide email address.");
+			throw new CompileException("Please provide email address.");
 		}
 
 		return $writer->write('?> '. ($node->htmlNode->name === 'a' ? 'href' : 'src') .'="<?php echo %escape($_gravatar->buildUrl('. $arguments['email'] .', '. $arguments['size'] .'))?>" <?php');
@@ -111,18 +111,27 @@ class Macros extends Nette\Latte\Macros\MacroSet
 	}
 
 	/**
-	 * @param \Nette\Templating\Template $template
-	 *
 	 * @throws \Nette\InvalidStateException
 	 */
-	public static function validateTemplateParams(Nette\Templating\Template $template)
+	public static function validateTemplateParams($template)
 	{
-		$params = $template->getParameters();
+		if ($template instanceof Nette\Templating\Template) {
+			$params = $template->getParameters();
+
+		} elseif ($template instanceof Nette\Bridges\ApplicationLatte\Template) {
+			$params = $template->getParameters();
+
+		} elseif ($template instanceof Template) {
+			$params = $template->getParameters();
+
+		} else {
+			throw new \InvalidArgumentException('Expected instanceof Template, ' . get_class($template) . ' given.');
+		}
+
+		/** @var \Nette\Application\UI\Control[]|string[] $params */
 
 		if (!isset($params['_gravatar']) || !$params['_gravatar'] instanceof Gravatar) {
-			$where = isset($params['control']) ?
-				" of component " . get_class($params['control']) . '(' . $params['control']->getName() . ')'
-				: NULL;
+			$where = isset($params['control']) ? " of component " . get_class($params['control']) . '(' . $params['control']->getName() . ')' : NULL;
 
 			throw new Nette\InvalidStateException(
 				'Please provide an instanceof IPub\\Gravatar\\Gravatar ' .
@@ -142,12 +151,12 @@ class Macros extends Nette\Latte\Macros\MacroSet
 			return trim($value);
 		}, explode(",", $macro));
 
-		$name	= $arguments[0];
-		$size	= (isset($arguments[1]) && !empty($arguments[1])) ? $arguments[1] : NULL;
+		$name = $arguments[0];
+		$size = (isset($arguments[1]) && !empty($arguments[1])) ? $arguments[1] : NULL;
 
 		return array(
-			"email"		=> $name,
-			"size"		=> $size,
+			'email' => $name,
+			'size' => $size,
 		);
 	}
 }
