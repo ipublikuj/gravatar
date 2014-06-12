@@ -44,32 +44,37 @@ class GravatarExtension extends Nette\DI\CompilerExtension
 	public function loadConfiguration()
 	{
 		$config = $this->getConfig($this->defaults);
-		$container = $this->getContainerBuilder();
+		$builder = $this->getContainerBuilder();
 
-		// Install extension latte macros
-		$latteFactory = $container->hasDefinition('nette.latteFactory')
-			? $container->getDefinition('nette.latteFactory')
-			: $container->getDefinition('nette.latte');
-
-		$install = 'IPub\Gravatar\Latte\Macros::install';
-		$latteFactory->addSetup($install . '(?->getCompiler())', array('@self'));
-
-		$gravatar = $container->addDefinition($this->prefix('gravatar'))
+		// Install Gravatar service
+		$builder->addDefinition($this->prefix('gravatar'))
 			->setClass('IPub\Gravatar\Gravatar')
 			->addSetup("setSize", array($config['size']))
 			->addSetup("setExpiration", array($config['expiration']))
 			->addSetup("setDefaultImage", array($config['defaultImage']));
 
 		// Register template helpers
-		$container->addDefinition($this->prefix('helpers'))
-			->setClass('IPub\Gravatar\Templating\Helpers', array($gravatar));
+		$builder->addDefinition($this->prefix('helpers'))
+			->setClass('IPub\Gravatar\Templating\Helpers')
+			->setFactory($this->prefix('@gravatar') . '::createTemplateHelpers')
+			->setInject(FALSE);
+
+		// Install extension latte macros
+		$latteFactory = $builder->hasDefinition('nette.latteFactory')
+			? $builder->getDefinition('nette.latteFactory')
+			: $builder->getDefinition('nette.latte');
+
+		$latteFactory
+			->addSetup('IPub\Gravatar\Latte\Macros::install(?->getCompiler())', array('@self'))
+			->addSetup('addFilter', array('gravatar', array($this->prefix('@helpers'), 'gravatar')))
+			->addSetup('addFilter', array('getGravatarService', array($this->prefix('@helpers'), 'getGravatarService')));
 	}
 
 	/**
 	 * @param \Nette\Configurator $config
 	 * @param string $extensionName
 	 */
-	public static function register(Nette\Configurator $config, $extensionName = 'gravatarExtension')
+	public static function register(Nette\Configurator $config, $extensionName = 'gravatar')
 	{
 		$config->onCompile[] = function (Configurator $config, Compiler $compiler) use ($extensionName) {
 			$compiler->addExtension($extensionName, new GravatarExtension());

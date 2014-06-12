@@ -16,16 +16,16 @@ namespace IPub\Gravatar\Templating;
 
 use Nette;
 
-use IPub\Gravatar\Gravatar;
+use IPub\Gravatar;
 
 class Helpers extends Nette\Object
 {
 	/**
-	 * @var Gravatar
+	 * @var Gravatar\Gravatar
 	 */
 	private $gravatar;
 
-	public function __construct(Gravatar $gravatar)
+	public function __construct(Gravatar\Gravatar $gravatar)
 	{
 		$this->gravatar = $gravatar;
 	}
@@ -41,5 +41,13 @@ class Helpers extends Nette\Object
 	{
 		return $this->gravatar
 			->buildUrl($email, $size);
+	}
+
+	/**
+	 * @return Gravatar\Gravatar
+	 */
+	public function getGravatarService()
+	{
+		return $this->gravatar;
 	}
 }

@@ -14,28 +14,20 @@
 
 namespace IPub\Gravatar\Latte;
 
-use Latte\CompileException;
+use Nette;
+
+use Latte;
 use Latte\Compiler;
 use Latte\MacroNode;
-use Latte\Macros\MacroSet;
 use Latte\PhpWriter;
-use Latte\Template;
-use Nette;;
-use IPub\Gravatar\Gravatar;
+use Latte\Macros\MacroSet;
 
-
+use IPub;
 
 class Macros extends MacroSet
 {
 	/**
-	 * @var bool
-	 */
-	private $isUsed = FALSE;
-
-	/**
-	 * @param Compiler $compiler
-	 *
-	 * @return ImgMacro|\Nette\Latte\Macros\MacroSet
+	 * Register latte macros
 	 */
 	public static function install(Compiler $compiler)
 	{
@@ -52,92 +44,39 @@ class Macros extends MacroSet
 	/**
 	 * @param MacroNode $node
 	 * @param PhpWriter $writer
-	 * @throws CompileException
+	 *
 	 * @return string
+	 *
+	 * @throws Latte\CompileException
 	 */
 	public function macroGravatar(MacroNode $node, PhpWriter $writer)
 	{
-		$this->isUsed = TRUE;
 		$arguments = self::prepareMacroArguments($node->args);
 
 		if ($arguments["email"] === NULL) {
-			throw new CompileException("Please provide email address.");
+			throw new Latte\CompileException("Please provide email address.");
 		}
 
-		return $writer->write('echo %escape($_gravatar->buildUrl('. $arguments['email'] .', '. $arguments['size'] .'))');
+		return $writer->write('echo %escape($template->getGravatarService()->buildUrl('. $arguments['email'] .', '. $arguments['size'] .'))');
 	}
 
 	/**
 	 * @param MacroNode $node
 	 * @param PhpWriter $writer
-	 * @throws CompileException
+	 *
 	 * @return string
+	 *
+	 * @throws Latte\CompileException
 	 */
 	public function macroAttrGravatar(MacroNode $node, PhpWriter $writer)
 	{
-		$this->isUsed = TRUE;
 		$arguments = self::prepareMacroArguments($node->args);
 
 		if ($arguments["email"] === NULL) {
-			throw new CompileException("Please provide email address.");
+			throw new Latte\CompileException("Please provide email address.");
 		}
 
-		return $writer->write('?> '. ($node->htmlNode->name === 'a' ? 'href' : 'src') .'="<?php echo %escape($_gravatar->buildUrl('. $arguments['email'] .', '. $arguments['size'] .'))?>" <?php');
-	}
-
-	/**
-	 *
-	 */
-	public function initialize()
-	{
-		$this->isUsed = FALSE;
-	}
-
-	/**
-	 * Finishes template parsing.
-	 *
-	 * @return array(prolog, epilog)
-	 */
-	public function finalize()
-	{
-		if (!$this->isUsed) {
-			return array();
-		}
-
-		return array(
-			get_called_class() . '::validateTemplateParams($template);',
-			NULL
-		);
-	}
-
-	/**
-	 * @throws \Nette\InvalidStateException
-	 */
-	public static function validateTemplateParams($template)
-	{
-		if ($template instanceof Nette\Templating\Template) {
-			$params = $template->getParameters();
-
-		} elseif ($template instanceof Nette\Bridges\ApplicationLatte\Template) {
-			$params = $template->getParameters();
-
-		} elseif ($template instanceof Template) {
-			$params = $template->getParameters();
-
-		} else {
-			throw new \InvalidArgumentException('Expected instanceof Template, ' . get_class($template) . ' given.');
-		}
-
-		/** @var \Nette\Application\UI\Control[]|string[] $params */
-
-		if (!isset($params['_gravatar']) || !$params['_gravatar'] instanceof Gravatar) {
-			$where = isset($params['control']) ? " of component " . get_class($params['control']) . '(' . $params['control']->getName() . ')' : NULL;
-
-			throw new Nette\InvalidStateException(
-				'Please provide an instanceof IPub\\Gravatar\\Gravatar ' .
-				'as a parameter $_gravatar to template' . $where
-			);
-		}
+		return $writer->write('?> '. ($node->htmlNode->name === 'a' ? 'href' : 'src') .'="<?php echo %escape($template->getGravatarService()->buildUrl('. $arguments['email'] .', '. $arguments['size'] .'))?>" <?php');
 	}
 
 	/**
@@ -155,8 +94,8 @@ class Macros extends MacroSet
 		$size = (isset($arguments[1]) && !empty($arguments[1])) ? $arguments[1] : NULL;
 
 		return array(
-			'email' => $name,
-			'size' => $size,
+			'email'	=> $name,
+			'size'	=> $size,
 		);
 	}
 }

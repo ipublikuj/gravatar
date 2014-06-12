@@ -15,9 +15,9 @@
 namespace IPub\Gravatar;
 
 use Nette;
-use Nette\Image,
-	Nette\InvalidArgumentException;
-use Nette\Utils\Validators;
+use Nette\Caching;
+use Nette\Http;
+use Nette\Utils;
 
 use IPub\Gravatar\Templating\Helpers;
 
@@ -79,11 +79,22 @@ class Gravatar extends \Nette\Object
 	protected $hashEmail = TRUE;
 
 	/**
-	 * @param Nette\Http\Request $httpRequest
+	 * @var Caching\Cache
 	 */
-	public function __construct(Nette\Http\Request $httpRequest)
-	{
+	protected $cache;
+
+	/**
+	 * @param Http\Request $httpRequest
+	 * @param Caching\IStorage $cacheStorage
+	 */
+	public function __construct(
+		Http\Request $httpRequest,
+		Caching\IStorage $cacheStorage
+	) {
 		$this->useSecureUrl = $httpRequest->isSecured();
+
+		// Init cache
+		$this->cache = new Caching\Cache($cacheStorage, 'IPub.Gravatar');
 	}
 
 	/**
@@ -106,7 +117,7 @@ class Gravatar extends \Nette\Object
 	 *
 	 * @return $this
 	 *
-	 * @throws InvalidArgumentException
+	 * @throws Nette\InvalidArgumentException
 	 */
 	public function setSize($size)
 	{
@@ -116,13 +127,13 @@ class Gravatar extends \Nette\Object
 		}
 
 		if (!is_int($size) && !ctype_digit($size)) {
-			throw new InvalidArgumentException('Avatar size specified must be an integer');
+			throw new Nette\InvalidArgumentException('Avatar size specified must be an integer');
 		}
 
 		$this->size = (int) $size;
 
 		if ($this->size > 512 || $this->size < 0) {
-			throw new InvalidArgumentException('Avatar size must be within 0 pixels and 512 pixels');
+			throw new Nette\InvalidArgumentException('Avatar size must be within 0 pixels and 512 pixels');
 		}
 
 		return $this;
@@ -159,7 +170,7 @@ class Gravatar extends \Nette\Object
 	 *
 	 * @return $this
 	 *
-	 * @throws InvalidArgumentException
+	 * @throws Nette\InvalidArgumentException
 	 */
 	public function setDefaultImage($image)
 	{
@@ -176,7 +187,7 @@ class Gravatar extends \Nette\Object
 
 		if (!isset($valid_defaults[$_image])) {
 			if (!filter_var($image, FILTER_VALIDATE_URL)) {
-				throw new InvalidArgumentException('The default image specified is not a recognized gravatar "default" and is not a valid URL');
+				throw new Nette\InvalidArgumentException('The default image specified is not a recognized gravatar "default" and is not a valid URL');
 
 			} else {
 				$this->defaultImage = rawurlencode($image);
@@ -206,7 +217,7 @@ class Gravatar extends \Nette\Object
 	 *
 	 * @return $this
 	 *
-	 * @throws InvalidArgumentException
+	 * @throws Nette\InvalidArgumentException
 	 */
 	public function setMaxRating($rating)
 	{
@@ -214,7 +225,7 @@ class Gravatar extends \Nette\Object
 		$valid_ratings = array('g' => 1, 'pg' => 1, 'r' => 1, 'x' => 1);
 		
 		if (!isset($valid_ratings[$rating])) {
-			throw new InvalidArgumentException(sprintf('Invalid rating "%s" specified, only "g", "pg", "r", or "x" are allowed to be used.', $rating));
+			throw new Nette\InvalidArgumentException(sprintf('Invalid rating "%s" specified, only "g", "pg", "r", or "x" are allowed to be used.', $rating));
 		}
 
 		$this->maxRating = $rating;
@@ -294,35 +305,31 @@ class Gravatar extends \Nette\Object
 	 *
 	 * @return Image
 	 *
-	 * @throws \Nette\InvalidArgumentException
+	 * @throws Nette\InvalidArgumentException
 	 */
 	public function get($email = NULL, $size = NULL)
 	{
 		// Set user email address
-		if ($email !== NULL && !Validators::isEmail($email)) {
-			throw new InvalidArgumentException('Inserted email is not valid email address');
+		if ($email !== NULL && !Utils\Validators::isEmail($email)) {
+			throw new Nette\InvalidArgumentException('Inserted email is not valid email address');
 		}
 
 		// Set gravatar size
 		$this->setSize($size);
 
-		$file = TEMP_DIR . DIRECTORY_SEPARATOR .'cache'. DIRECTORY_SEPARATOR .'_Gravatar.Images'. DIRECTORY_SEPARATOR . $this->getEmailHash($email) . '_' . $this->size . '.jpeg';
-
-		if ( !file_exists($file) || filemtime($file) < time() - $this->expiration ) {
-			if ( !file_exists(TEMP_DIR . DIRECTORY_SEPARATOR .'cache'. DIRECTORY_SEPARATOR .'_Gravatar.Images') ) {
-				mkdir(TEMP_DIR . DIRECTORY_SEPARATOR .'cache'. DIRECTORY_SEPARATOR .'_Gravatar.Images');
-			}
-
+		// Check if avatar is in cache
+		if (!$gravatar = $this->cache->load($this->getEmailHash($email) .'.'. $this->size)) {
 			// Get gravatar content
-			$img = @file_get_contents($this->buildUrl($email));
+			$gravatar = @file_get_contents($this->buildUrl($email));
 
-			if ( $img != NULL ) {
-				file_put_contents($file, $img);
-			}
+			// Store facebook avatar url into cache
+			$this->cache->save($this->getEmailHash($email) .'.'. $this->size, $gravatar, array(
+				Caching\Cache::EXPIRE => '7 days',
+			));
 		}
 
-		$this->image	= Image::fromFile($file);
-		$this->type		= Image::JPEG;
+		$this->image	= Utils\Image::fromString($gravatar);
+		$this->type		= Utils\Image::JPEG;
 
 		return $this->image;
 	}
@@ -335,13 +342,13 @@ class Gravatar extends \Nette\Object
 	 *
 	 * @return string
 	 * 
-	 * @throws \Nette\InvalidArgumentException
+	 * @throws Nette\InvalidArgumentException
 	 */
 	public function buildUrl($email = NULL, $size = NULL)
 	{
 		// Set user email address
-		if ($email !== NULL && !Validators::isEmail($email)) {
-			throw new InvalidArgumentException('Inserted email is not valid email address');
+		if ($email !== NULL && !Utils\Validators::isEmail($email)) {
+			throw new Nette\InvalidArgumentException('Inserted email is not valid email address');
 		}
 
 		// Set gravatar size
