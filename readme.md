@@ -1,5 +1,9 @@
 # Gravatar
 
+[![Build Status](https://img.shields.io/travis/iPublikuj/gravatar.svg?style=flat-square)](https://travis-ci.org/iPublikuj/gravatar)
+[![Latest Stable Version](https://img.shields.io/packagist/v/ipub/gravatar.svg?style=flat-square)](https://packagist.org/packages/ipub/gravatar)
+[![Composer Downloads](https://img.shields.io/packagist/dt/ipub/gravatar.svg?style=flat-square)](https://packagist.org/packages/ipub/gravatar)
+
 Simple gravatar creator for [Nette Framework](http://nette.org/)
 
 ## Instalation
