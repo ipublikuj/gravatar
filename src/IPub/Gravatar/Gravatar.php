@@ -339,20 +339,19 @@ class Gravatar extends \Nette\Object
 	 *
 	 * @param string|null $email
 	 * @param int|null $size
+	 * @param string|null $maxRating
+	 * @param string|null $defaultImage
 	 *
 	 * @return string
 	 * 
 	 * @throws Nette\InvalidArgumentException
 	 */
-	public function buildUrl($email = NULL, $size = NULL)
+	public function buildUrl($email = NULL, $size = NULL, $maxRating = NULL, $defaultImage = NULL)
 	{
 		// Set user email address
 		if ($email !== NULL && !Utils\Validators::isEmail($email)) {
 			throw new Nette\InvalidArgumentException('Inserted email is not valid email address');
 		}
-
-		// Set gravatar size
-		$this->setSize($size);
 
 		// Tack the email hash onto the end.
 		if ( $this->hashEmail == TRUE && $email !== NULL ) {
@@ -375,10 +374,13 @@ class Gravatar extends \Nette\Object
 
 		// Time to figure out our request params
 		$params = array();
-		$params['s'] = $this->getSize();
-		$params['r'] = $this->getMaxRating();
+		$params['s'] = $size ? $size : $this->getSize();
+		$params['r'] = $maxRating ? $maxRating : $this->getMaxRating();
 
-		if ( $this->getDefaultImage() ) {
+		if ($defaultImage) {
+			$params['d'] = $defaultImage;
+
+		} else if ($this->getDefaultImage()) {
 			$params['d'] = $this->getDefaultImage();
 		}
 
@@ -388,6 +390,29 @@ class Gravatar extends \Nette\Object
 
 		// And we're done.
 		return $url->appendQuery($params)->getAbsoluteUrl();
+	}
+
+	/**
+	 * Checks if a gravatar exists for the email. It does this by checking for the presence of 404 in the header
+	 * returned. Will return null if fsockopen fails, for example when the hostname cannot be resolved.
+	 *
+	 * @param string $email
+	 *
+	 * @return Boolean|null Boolean if we could connect, null if no connection to gravatar.com
+	 */
+	public function exists($email)
+	{
+		$path = $this->buildUrl($email, NULL, NULL, '404');
+
+		if (!$sock = @fsockopen('gravatar.com', 80, $errorNo, $error)) {
+			return NULL;
+		}
+
+		fputs($sock, "HEAD " . $path . " HTTP/1.0\r\n\r\n");
+		$header = fgets($sock, 128);
+		fclose($sock);
+
+		return strpos($header, '404') ? FALSE : TRUE;
 	}
 
 	/**
