@@ -15,22 +15,10 @@
 namespace IPub\Gravatar\DI;
 
 use Nette;
-use Nette\DI\Compiler;
-use Nette\DI\Configurator;
+use Nette\DI;
 use Nette\PhpGenerator as Code;
 
-if (!class_exists('Nette\DI\CompilerExtension')) {
-	class_alias('Nette\Config\CompilerExtension', 'Nette\DI\CompilerExtension');
-	class_alias('Nette\Config\Compiler', 'Nette\DI\Compiler');
-	class_alias('Nette\Config\Helpers', 'Nette\DI\Config\Helpers');
-}
-
-if (isset(Nette\Loaders\NetteLoader::getInstance()->renamed['Nette\Configurator']) || !class_exists('Nette\Configurator')) {
-	unset(Nette\Loaders\NetteLoader::getInstance()->renamed['Nette\Configurator']);
-	class_alias('Nette\Config\Configurator', 'Nette\Configurator');
-}
-
-class GravatarExtension extends Nette\DI\CompilerExtension
+class GravatarExtension extends DI\CompilerExtension
 {
 	/**
 	 * @var array
@@ -71,12 +59,12 @@ class GravatarExtension extends Nette\DI\CompilerExtension
 	}
 
 	/**
-	 * @param \Nette\Configurator $config
+	 * @param Nette\Configurator $config
 	 * @param string $extensionName
 	 */
 	public static function register(Nette\Configurator $config, $extensionName = 'gravatar')
 	{
-		$config->onCompile[] = function (Configurator $config, Compiler $compiler) use ($extensionName) {
+		$config->onCompile[] = function (Nette\Configurator $config, Nette\DI\Compiler $compiler) use ($extensionName) {
 			$compiler->addExtension($extensionName, new GravatarExtension());
 		};
 	}
