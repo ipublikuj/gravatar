@@ -11,9 +11,7 @@ echo "Nette version " . $version . PHP_EOL;
 $file = __DIR__ . '/composer.json';
 $content = file_get_contents($file);
 $composer  = json_decode($content, TRUE);
-if (!isset($composer['require']['nette/forms'])) {
-	exit(255);
-}
+
 $composer['require']['nette/application'] = $version;
 $composer['require']['nette/di'] = $version;
 $composer['require']['nette/http'] = $version;
