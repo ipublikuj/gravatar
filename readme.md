@@ -6,10 +6,9 @@
 
 Simple gravatar creator for [Nette Framework](http://nette.org/)
 
-## Instalation
+## Installation
 
 The best way to install ipub/gravatar is using  [Composer](http://getcomposer.org/):
-
 
 ```json
 {
@@ -20,7 +19,6 @@ The best way to install ipub/gravatar is using  [Composer](http://getcomposer.or
 ```
 
 or
-
 
 ```sh
 $ composer require ipub/gravatar:@dev
