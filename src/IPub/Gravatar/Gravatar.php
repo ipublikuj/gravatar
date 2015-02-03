@@ -100,14 +100,23 @@ class Gravatar extends \Nette\Object
 	/**
 	 * Get the email hash to use (after cleaning the string)
 	 *
-	 * @param string $email
+	 * @param null|string $email
 	 * 
 	 * @return string - The hashed form of the email, post cleaning
 	 */
-	public function getEmailHash($email)
+	public function getEmailHash($email = NULL)
 	{
-		// Using md5 as per gravatar docs.
-		return hash('md5', strtolower(trim($email)));
+		// Tack the email hash onto the end.
+		if ($this->hashEmail == TRUE && $email !== NULL) {
+			// Using md5 as per gravatar docs
+			return hash('md5', strtolower(trim($email)));
+
+		} else if ($email !== NULL) {
+			return $email;
+
+		} else {
+			return str_repeat('0', 32);
+		}
 	}
 
 	/**
@@ -354,26 +363,13 @@ class Gravatar extends \Nette\Object
 		}
 
 		// Tack the email hash onto the end.
-		if ( $this->hashEmail == TRUE && $email !== NULL ) {
-			$emailHash = $this->getEmailHash($email);
+		$emailHash = $this->getEmailHash($email);
 
-		} else if ( $email !== NULL ) {
-			$emailHash = $email;
-
-		} else {
-			$emailHash = str_repeat('0', 32);
-		}
-
-		// Start building the URL, and deciding if we're doing this via HTTPS or HTTP.
-		if ( $this->useSecureUrl ) {
-			$url = new Nette\Http\Url(static::HTTPS_URL . $emailHash);
-
-		} else {
-			$url = new Nette\Http\Url(static::HTTP_URL . $emailHash);
-		}
+		// Create base url
+		$url = $this->createUrl($emailHash);
 
 		// Time to figure out our request params
-		$params = array();
+		$params = [];
 		$params['s'] = $size ? $size : $this->getSize();
 		$params['r'] = $maxRating ? $maxRating : $this->getMaxRating();
 
@@ -384,7 +380,7 @@ class Gravatar extends \Nette\Object
 			$params['d'] = $this->getDefaultImage();
 		}
 
-		if ( $email === NULL ) {
+		if ($email === NULL) {
 			$params['f'] = 'y';
 		}
 
@@ -421,5 +417,23 @@ class Gravatar extends \Nette\Object
 	public function createTemplateHelpers()
 	{
 		return new Helpers($this);
+	}
+
+	/**
+	 * @param string $emailHash
+	 *
+	 * @return Http\Url
+	 */
+	private function createUrl($emailHash)
+	{
+		// Start building the URL, and deciding if we're doing this via HTTPS or HTTP.
+		if ($this->useSecureUrl) {
+			$url = new Nette\Http\Url(static::HTTPS_URL . $emailHash);
+
+		} else {
+			$url = new Nette\Http\Url(static::HTTP_URL . $emailHash);
+		}
+
+		return $url;
 	}
 }
