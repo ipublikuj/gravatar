@@ -250,7 +250,7 @@ class Gravatar extends \Nette\Object
 	/**
 	 * Returns the Nette\Image instance
 	 *
-	 * @return Image
+	 * @return Utils\Image
 	 */
 	public function getImage()
 	{
@@ -307,7 +307,7 @@ class Gravatar extends \Nette\Object
 	 * @param string|null $email
 	 * @param int|null $size
 	 *
-	 * @return Image
+	 * @return Utils\Image
 	 *
 	 * @throws Nette\InvalidArgumentException
 	 */
@@ -357,30 +357,11 @@ class Gravatar extends \Nette\Object
 			throw new Nette\InvalidArgumentException('Inserted email is not valid email address');
 		}
 
-		// Tack the email hash onto the end.
-		$emailHash = $this->getEmailHash($email);
-
 		// Create base url
-		$url = $this->createUrl($emailHash);
-
-		// Time to figure out our request params
-		$params = [];
-		$params['s'] = $size ? $size : $this->getSize();
-		$params['r'] = $maxRating ? $maxRating : $this->getMaxRating();
-
-		if ($defaultImage) {
-			$params['d'] = $defaultImage;
-
-		} else if ($this->getDefaultImage()) {
-			$params['d'] = $this->getDefaultImage();
-		}
-
-		if ($email === NULL) {
-			$params['f'] = 'y';
-		}
+		$url = $this->createUrl($email, $size, $maxRating, $defaultImage);
 
 		// And we're done.
-		return $url->appendQuery($params)->getAbsoluteUrl();
+		return $url->getAbsoluteUrl();
 	}
 
 	/**
@@ -407,7 +388,7 @@ class Gravatar extends \Nette\Object
 	}
 
 	/**
-	 * @return TemplateHelpers
+	 * @return Helpers
 	 */
 	public function createTemplateHelpers()
 	{
@@ -415,12 +396,18 @@ class Gravatar extends \Nette\Object
 	}
 
 	/**
-	 * @param string $emailHash
+	 * @param string $email
+	 * @param null|int $size
+	 * @param null|string $maxRating
+	 * @param null|string $defaultImage
 	 *
 	 * @return Http\Url
 	 */
-	private function createUrl($emailHash)
+	private function createUrl($email, $size = NULL, $maxRating = NULL, $defaultImage = NULL)
 	{
+		// Tack the email hash onto the end.
+		$emailHash = $this->getEmailHash($email);
+
 		// Start building the URL, and deciding if we're doing this via HTTPS or HTTP.
 		if ($this->useSecureUrl) {
 			$url = new Nette\Http\Url(static::HTTPS_URL . $emailHash);
@@ -428,6 +415,25 @@ class Gravatar extends \Nette\Object
 		} else {
 			$url = new Nette\Http\Url(static::HTTP_URL . $emailHash);
 		}
+
+		// Time to figure out our request params
+		$params = [];
+		$params['s'] = $size ? $size : $this->getSize();
+		$params['r'] = $maxRating ? $maxRating : $this->getMaxRating();
+
+		if ($defaultImage) {
+			$params['d'] = $defaultImage;
+
+		} else if ($this->getDefaultImage()) {
+			$params['d'] = $this->getDefaultImage();
+		}
+
+		if ($email === NULL) {
+			$params['f'] = 'y';
+		}
+
+		// Add query params
+		$url->appendQuery($params);
 
 		return $url;
 	}

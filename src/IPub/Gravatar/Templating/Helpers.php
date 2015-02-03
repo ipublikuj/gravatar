@@ -1,6 +1,6 @@
 <?php
 /**
- * TemplateHelpers.php
+ * Helpers.php
  *
  * @copyright	More in license.md
  * @license		http://www.ipublikuj.eu
