@@ -23,11 +23,11 @@ class GravatarExtension extends DI\CompilerExtension
 	/**
 	 * @var array
 	 */
-	protected $defaults = array(
+	protected $defaults = [
 		'expiration'	=> 172800,
 		'size'			=> 80,
 		'defaultImage'	=> FALSE
-	);
+	];
 
 	public function loadConfiguration()
 	{
@@ -37,9 +37,9 @@ class GravatarExtension extends DI\CompilerExtension
 		// Install Gravatar service
 		$builder->addDefinition($this->prefix('gravatar'))
 			->setClass('IPub\Gravatar\Gravatar')
-			->addSetup("setSize", array($config['size']))
-			->addSetup("setExpiration", array($config['expiration']))
-			->addSetup("setDefaultImage", array($config['defaultImage']));
+			->addSetup("setSize", [$config['size']])
+			->addSetup("setExpiration", [$config['expiration']])
+			->addSetup("setDefaultImage", [$config['defaultImage']]);
 
 		// Register template helpers
 		$builder->addDefinition($this->prefix('helpers'))
@@ -53,9 +53,9 @@ class GravatarExtension extends DI\CompilerExtension
 			: $builder->getDefinition('nette.latte');
 
 		$latteFactory
-			->addSetup('IPub\Gravatar\Latte\Macros::install(?->getCompiler())', array('@self'))
-			->addSetup('addFilter', array('gravatar', array($this->prefix('@helpers'), 'gravatar')))
-			->addSetup('addFilter', array('getGravatarService', array($this->prefix('@helpers'), 'getGravatarService')));
+			->addSetup('IPub\Gravatar\Latte\Macros::install(?->getCompiler())', ['@self'])
+			->addSetup('addFilter', ['gravatar', [$this->prefix('@helpers'), 'gravatar']])
+			->addSetup('addFilter', ['getGravatarService', [$this->prefix('@helpers'), 'getGravatarService']]);
 	}
 
 	/**

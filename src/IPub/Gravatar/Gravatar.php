@@ -131,14 +131,13 @@ class Gravatar extends \Nette\Object
 	public function setSize($size)
 	{
 		if (!is_int($size) && !ctype_digit($size)) {
-			throw new Nette\InvalidArgumentException('Avatar size specified must be an integer');
+			throw new Nette\InvalidArgumentException('Size specified must be an integer');
+
+		} else if ($size > 512 || $size < 0) {
+			throw new Nette\InvalidArgumentException('Size must be within 0 pixels and 512 pixels');
 		}
 
 		$this->size = (int) $size;
-
-		if ($this->size > 512 || $this->size < 0) {
-			throw new Nette\InvalidArgumentException('Avatar size must be within 0 pixels and 512 pixels');
-		}
 
 		return $this;
 	}
@@ -189,22 +188,22 @@ class Gravatar extends \Nette\Object
 		if ($image === FALSE) {
 			$this->defaultImage = FALSE;
 
-			return $this;
-		}
+		} else {
+			// Check $image against recognized gravatar "defaults"
+			// and if it doesn't match any of those we need to see if it is a valid URL.
+			$_image = strtolower($image);
 
-		// Check $image against recognized gravatar "defaults", and if it doesn't match any of those we need to see if it is a valid URL.
-		$_image = strtolower($image);
-
-		if (!in_array($_image, ['404', 'mm', 'identicon', 'monsterid', 'wavatar', 'retro'])) {
-			if (!filter_var($image, FILTER_VALIDATE_URL)) {
-				throw new Nette\InvalidArgumentException('The default image specified is not a recognized gravatar "default" and is not a valid URL');
+			if (in_array($_image, ['404', 'mm', 'identicon', 'monsterid', 'wavatar', 'retro'])) {
+				$this->defaultImage = $_image;
 
 			} else {
-				$this->defaultImage = rawurlencode($image);
-			}
+				if (filter_var($image, FILTER_VALIDATE_URL)) {
+					$this->defaultImage = rawurlencode($image);
 
-		} else {
-			$this->defaultImage = $_image;
+				} else {
+					throw new Nette\InvalidArgumentException('The default image is not a valid gravatar "default" and is not a valid URL');
+				}
+			}
 		}
 
 		return $this;
@@ -340,16 +339,13 @@ class Gravatar extends \Nette\Object
 			throw new Nette\InvalidArgumentException('Inserted email is not valid email address');
 		}
 
-		// Set gravatar size
-		$this->setSize($size);
-
 		// Check if avatar is in cache
-		if (!$gravatar = $this->cache->load($this->getEmailHash($email) .'.'. $this->size)) {
+		if (!$gravatar = $this->cache->load($this->getEmailHash($email) .'.'. $this->getSize($size))) {
 			// Get gravatar content
-			$gravatar = @file_get_contents($this->buildUrl($email));
+			$gravatar = @file_get_contents($this->buildUrl($email, $size));
 
 			// Store facebook avatar url into cache
-			$this->cache->save($this->getEmailHash($email) .'.'. $this->size, $gravatar, array(
+			$this->cache->save($this->getEmailHash($email) .'.'. $this->getSize($size), $gravatar, array(
 				Caching\Cache::EXPIRE => '7 days',
 			));
 		}
