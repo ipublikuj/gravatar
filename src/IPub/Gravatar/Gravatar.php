@@ -130,11 +130,6 @@ class Gravatar extends \Nette\Object
 	 */
 	public function setSize($size)
 	{
-		// Skip if size is not set
-		if ( !$size ) {
-			return $this;
-		}
-
 		if (!is_int($size) && !ctype_digit($size)) {
 			throw new Nette\InvalidArgumentException('Avatar size specified must be an integer');
 		}
