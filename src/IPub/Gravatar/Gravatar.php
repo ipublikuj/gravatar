@@ -64,7 +64,7 @@ class Gravatar extends \Nette\Object
 	protected $useSecureUrl = FALSE;
 
 	/**
-	 * @var string|Utils\Image
+	 * @var Utils\Image
 	 */
 	protected $image;
 
@@ -420,17 +420,8 @@ class Gravatar extends \Nette\Object
 		$params = [];
 		$params['s'] = $size ? $size : $this->getSize();
 		$params['r'] = $maxRating ? $maxRating : $this->getMaxRating();
-
-		if ($defaultImage) {
-			$params['d'] = $defaultImage;
-
-		} else if ($this->getDefaultImage()) {
-			$params['d'] = $this->getDefaultImage();
-		}
-
-		if ($email === NULL) {
-			$params['f'] = 'y';
-		}
+		$params['d'] = $defaultImage ? $defaultImage : ($this->getDefaultImage() ? $this->getDefaultImage() : NULL);
+		$params['f'] = is_null($email) ? 'y' : NULL;
 
 		// Add query params
 		$url->appendQuery($params);
