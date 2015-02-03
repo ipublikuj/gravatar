@@ -64,7 +64,7 @@ class Gravatar extends \Nette\Object
 	protected $useSecureUrl = FALSE;
 
 	/**
-	 * @var string|Image
+	 * @var string|Utils\Image
 	 */
 	protected $image;
 
