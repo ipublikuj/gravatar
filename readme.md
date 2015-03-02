@@ -60,7 +60,7 @@ class BasePresenter extends Nette\Application\UI\Presenter
 		// Add gravatar to template
 		$template->_gravatar = $this->gravatar;
 		// Register template helpers
-		$template->registerHelperLoader(callback($this->gravatar->createTemplateHelpers(), 'loader'));
+		$this->gravatar->createTemplateHelpers()->register($template->getLatte());
 
 		return $template;
 	}
