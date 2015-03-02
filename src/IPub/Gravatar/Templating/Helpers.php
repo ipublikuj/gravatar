@@ -15,7 +15,7 @@
 namespace IPub\Gravatar\Templating;
 
 use Nette;
-
+use Latte\Engine;
 use IPub\Gravatar;
 
 class Helpers extends Nette\Object
@@ -29,12 +29,18 @@ class Helpers extends Nette\Object
 	{
 		$this->gravatar = $gravatar;
 	}
+	
+	public function register(Engine $engine)
+	{
+		$engine->addFilter('gravatar', array($this, 'gravatar'));
+	}
 
+	/**
+	 * @deprecated
+	 */
 	public function loader($method)
 	{
-		if ( method_exists($this, $method) ) {
-			return callback($this, $method);
-		}
+
 	}
 
 	public function gravatar($email, $size = NULL)
