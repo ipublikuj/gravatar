@@ -47,6 +47,7 @@ class ExtensionTest extends Tester\TestCase
 		$dic = $this->createContainer();
 
 		Assert::true($dic->getService('gravatar.gravatar') instanceof IPub\Gravatar\Gravatar);
+		Assert::true($dic->getService('gravatar.cache') instanceof IPub\Gravatar\Caching\GravatarCache);
 	}
 }
 

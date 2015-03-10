@@ -41,6 +41,11 @@ class GravatarExtension extends DI\CompilerExtension
 			->addSetup("setExpiration", [$config['expiration']])
 			->addSetup("setDefaultImage", [$config['defaultImage']]);
 
+		// Create cache services
+		$builder->addDefinition($this->prefix('cache'))
+			->setClass('IPub\Gravatar\Caching\GravatarCache', ['@cacheStorage', 'IPub.Gravatar'])
+			->setInject(FALSE);
+
 		// Register template helpers
 		$builder->addDefinition($this->prefix('helpers'))
 			->setClass('IPub\Gravatar\Templating\Helpers')

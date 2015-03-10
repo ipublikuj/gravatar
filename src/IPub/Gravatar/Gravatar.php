@@ -15,11 +15,12 @@
 namespace IPub\Gravatar;
 
 use Nette;
-use Nette\Caching;
 use Nette\Http;
 use Nette\Utils;
 
-use IPub\Gravatar\Templating\Helpers;
+use IPub;
+use IPub\Gravatar\Caching;
+use IPub\Gravatar\Templating;
 
 class Gravatar extends \Nette\Object
 {
@@ -85,16 +86,16 @@ class Gravatar extends \Nette\Object
 
 	/**
 	 * @param Http\Request $httpRequest
-	 * @param Caching\IStorage $cacheStorage
+	 * @param Caching\GravatarCache $cache
 	 */
 	public function __construct(
 		Http\Request $httpRequest,
-		Caching\IStorage $cacheStorage
+		Caching\GravatarCache $cache
 	) {
 		$this->useSecureUrl = $httpRequest->isSecured();
 
 		// Init cache
-		$this->cache = new Caching\Cache($cacheStorage, 'IPub.Gravatar');
+		$this->cache = $cache;
 	}
 
 	/**
@@ -406,11 +407,11 @@ class Gravatar extends \Nette\Object
 	}
 
 	/**
-	 * @return Helpers
+	 * @return Templating\Helpers
 	 */
 	public function createTemplateHelpers()
 	{
-		return new Helpers($this);
+		return new Templating\Helpers($this);
 	}
 
 	/**
