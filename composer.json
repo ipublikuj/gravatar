@@ -33,7 +33,7 @@
 	"require-dev": {
 		"nette/bootstrap"		: "~2.4",
 		"nette/mail"			: "~2.4",
-		"nette/safe-stream"		: "~2.4",
+		"nette/safe-stream"		: "~2.3",
 		"nette/robot-loader"	: "~2.4",
 		"nette/tester"			: "@dev",
 
