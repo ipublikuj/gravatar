@@ -124,7 +124,7 @@ final class Gravatar extends \Nette\Object
 	public function getEmailHash(string $email = NULL) : string
 	{
 		// Tack the email hash onto the end.
-		if ($this->hashEmail == TRUE && $email !== NULL) {
+		if ($this->hashEmail === TRUE && $email !== NULL) {
 			// Using md5 as per gravatar docs
 			return hash('md5', strtolower(trim($email)));
 

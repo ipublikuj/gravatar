@@ -90,7 +90,7 @@ final class GravatarResponse extends Nette\Object implements Nette\Application\I
 	 *
 	 * @return Utils\Image
 	 */
-	final public function getImage()
+	public function getImage()
 	{
 		return $this->image;
 	}
@@ -101,7 +101,7 @@ final class GravatarResponse extends Nette\Object implements Nette\Application\I
 	 *
 	 * @return string
 	 */
-	final public function getType()
+	public function getType()
 	{
 		return $this->type;
 	}
