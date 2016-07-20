@@ -22,19 +22,19 @@
 	"require": {
 		"php"	: ">=7.0.0",
 
-		"nette/application"	: "~2.4",
-		"nette/di"			: "~2.4",
-		"nette/http"		: "~2.4",
-		"nette/utils"		: "~2.4",
+		"nette/application"	: "~2.3@dev",
+		"nette/di"			: "~2.3@dev",
+		"nette/http"		: "~2.3@dev",
+		"nette/utils"		: "~2.3@dev",
 
-		"latte/latte"	: "~2.4"
+		"latte/latte"	: "~2.3@dev"
 	},
 
 	"require-dev": {
-		"nette/bootstrap"		: "~2.4",
-		"nette/mail"			: "~2.4",
-		"nette/safe-stream"		: "~2.3",
-		"nette/robot-loader"	: "~2.4",
+		"nette/bootstrap"		: "~2.3@dev",
+		"nette/mail"			: "~2.3@dev",
+		"nette/safe-stream"		: "~2.3@dev",
+		"nette/robot-loader"	: "~2.3@dev",
 		"nette/tester"			: "@dev",
 
 		"tracy/tracy"	: "@dev"
