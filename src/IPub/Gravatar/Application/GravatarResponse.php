@@ -2,15 +2,17 @@
 /**
  * GravatarExtension.php
  *
- * @copyright	More in license.md
- * @license		http://www.ipublikuj.eu
- * @author		Adam Kadlec http://www.ipublikuj.eu
- * @package		iPublikuj:Gravatar!
- * @subpackage	Application
- * @since		5.0
+ * @copyright      More in license.md
+ * @license        http://www.ipublikuj.eu
+ * @author         Adam Kadlec http://www.ipublikuj.eu
+ * @package        iPublikuj:Gravatar!
+ * @subpackage     Application
+ * @since          1.0.0
  *
- * @date		02.03.15
+ * @date           02.03.15
  */
+
+declare(strict_types = 1);
 
 namespace IPub\Gravatar\Application;
 
@@ -20,35 +22,44 @@ use Nette\Http;
 
 use IPub;
 use IPub\Gravatar;
+use IPub\Gravatar\Exceptions;
 
-class GravatarResponse extends Nette\Object implements Nette\Application\IResponse
+/**
+ * Gravatar image response
+ *
+ * @package        iPublikuj:Gravatar!
+ * @subpackage     Application
+ *
+ * @author         Adam Kadlec <adam.kadlec@fastybird.com>
+ */
+final class GravatarResponse extends Nette\Object implements Nette\Application\IResponse
 {
 	/**
 	 * @var Utils\Image
 	 */
-	protected $image;
+	private $image;
 
 	/**
 	 * @var string
 	 */
-	protected $type;
+	private $type;
 
 	/**
 	 * @param string $email
 	 * @param int $size 1-512
 	 *
-	 * @thrown Nette\InvalidArgumentException
-	 * @thrown Nette\InvalidStateException
+	 * @thrown Exceptions\InvalidArgumentException
+	 * @thrown Exceptions\InvalidStateException
 	 */
-	public function __construct($email, $size)
+	public function __construct(string $email, int $size)
 	{
 		// Set user email address
-		if ($email !== NULL && !Utils\Validators::isEmail($email)) {
-			throw new Nette\InvalidArgumentException('Inserted email is not valid email address');
+		if (!Utils\Validators::isEmail($email)) {
+			throw new Exceptions\InvalidArgumentException('Inserted email is not valid email address');
 		}
 
-		if ((int) $size < 1 || (int) $size > 512) {
-			throw new Nette\InvalidArgumentException("Unsupported size '$size', Gravatar expects '1 - 512'.");
+		if ($size < 1 || $size > 512) {
+			throw new Exceptions\InvalidArgumentException(sprintf('Unsupported size "%s", Gravatar expects "1 - 512".', $size));
 		}
 
 		$path = $this->createUrl($email, $size, 404);
@@ -62,7 +73,7 @@ class GravatarResponse extends Nette\Object implements Nette\Application\IRespon
 		fclose($sock);
 
 		if (strpos($header, '404')) {
-			throw new Nette\InvalidStateException('Gravatar image could not be loaded from the server.');
+			throw new Exceptions\InvalidStateException('Gravatar image could not be loaded from the server.');
 		}
 
 		$path = $this->createUrl($email, $size);
@@ -73,15 +84,17 @@ class GravatarResponse extends Nette\Object implements Nette\Application\IRespon
 		$this->type = Utils\Image::JPEG;
 	}
 
+
 	/**
-	 * Returns the path to a file or Nette\Utils\Image instance
+	 * Returns Nette\Utils\Image instance
 	 *
-	 * @return string|Utils\Image
+	 * @return Utils\Image
 	 */
 	final public function getImage()
 	{
 		return $this->image;
 	}
+
 
 	/**
 	 * Returns the type of a image
@@ -92,6 +105,7 @@ class GravatarResponse extends Nette\Object implements Nette\Application\IRespon
 	{
 		return $this->type;
 	}
+
 
 	/**
 	 * Sends response to output
@@ -106,6 +120,7 @@ class GravatarResponse extends Nette\Object implements Nette\Application\IRespon
 		echo $this->image->send($this->type, 85);
 	}
 
+
 	/**
 	 * @param string $email
 	 * @param int $size
@@ -113,7 +128,7 @@ class GravatarResponse extends Nette\Object implements Nette\Application\IRespon
 	 *
 	 * @return string
 	 */
-	private function createUrl($email, $size, $defaultImage = NULL)
+	private function createUrl(string $email, int $size, string $defaultImage = NULL) : string
 	{
 		// Tack the email hash onto the end.
 		$emailHash = hash('md5', strtolower(trim($email)));
@@ -125,12 +140,12 @@ class GravatarResponse extends Nette\Object implements Nette\Application\IRespon
 		$params = [];
 		$params['s'] = $size;
 		$params['r'] = 'g';
-		$params['d'] = $defaultImage ?:'mm';
+		$params['d'] = $defaultImage ?: 'mm';
 
 		// Add query params
 		$url->appendQuery($params);
 
-		// And we're done.
+		// And we're done
 		return $url->getAbsoluteUrl();
 	}
 }

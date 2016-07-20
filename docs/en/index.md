@@ -6,18 +6,8 @@ Simple gravatar creator for [Nette Framework](http://nette.org/)
 
 The best way to install ipub/gravatar is using  [Composer](http://getcomposer.org/):
 
-```json
-{
-	"require": {
-		"ipub/gravatar": "dev-master"
-	}
-}
-```
-
-or
-
 ```sh
-$ composer require ipub/gravatar:@dev
+$ composer require ipub/gravatar
 ```
 
 After that you have to register extension in config.neon.
@@ -50,6 +40,18 @@ output:
 
 ```html
 <img src="http://www.gravatar.com/avatar/b530fd3b225b17f5f7e701283e710a6e?s=120&r=g&d=mm" />
+```
+
+or if you need gravatar url only you can use macro:
+
+```html
+{gravatar 'john@doe.com', 100}
+```
+
+output:
+
+```html
+http://www.gravatar.com/avatar/b530fd3b225b17f5f7e701283e710a6e?s=120&r=g&d=mm
 ```
 
 ### Using in presenters and components

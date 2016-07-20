@@ -2,15 +2,17 @@
 /**
  * Helpers.php
  *
- * @copyright	More in license.md
- * @license		http://www.ipublikuj.eu
- * @author		Adam Kadlec http://www.ipublikuj.eu
- * @package		iPublikuj:Gravatar!
- * @subpackage	Templating
- * @since		5.0
+ * @copyright      More in license.md
+ * @license        http://www.ipublikuj.eu
+ * @author         Adam Kadlec http://www.ipublikuj.eu
+ * @package        iPublikuj:Gravatar!
+ * @subpackage     Templating
+ * @since          1.0.0
  *
- * @date		05.04.14
+ * @date           05.04.14
  */
+
+declare(strict_types = 1);
 
 namespace IPub\Gravatar\Templating;
 
@@ -20,13 +22,29 @@ use Latte\Engine;
 
 use IPub\Gravatar;
 
-class Helpers extends Nette\Object
+/**
+ * Gravatar template filters
+ *
+ * @package        iPublikuj:Gravatar!
+ * @subpackage     Templating
+ *
+ * @author         Adam Kadlec <adam.kadlec@fastybird.com>
+ */
+final class Helpers extends Nette\Object
 {
+	/**
+	 * Define class name
+	 */
+	const CLASS_NAME = __CLASS__;
+
 	/**
 	 * @var Gravatar\Gravatar
 	 */
 	private $gravatar;
 
+	/**
+	 * @param Gravatar\Gravatar $gravatar
+	 */
 	public function __construct(Gravatar\Gravatar $gravatar)
 	{
 		$this->gravatar = $gravatar;
@@ -39,27 +57,18 @@ class Helpers extends Nette\Object
 	 */
 	public function register(Engine $engine)
 	{
-		$engine->addFilter('gravatar', array($this, 'gravatar'));
-		$engine->addFilter('getGravatarService', array($this, 'getGravatarService'));
+		$engine->addFilter('gravatar', [$this, 'gravatar']);
 	}
 
 	/**
 	 * @param string $email
-	 * @param null|int $size
+	 * @param int|NULL $size
 	 *
 	 * @return string
 	 */
-	public function gravatar($email, $size = NULL)
+	public function gravatar(string $email, int $size = NULL) : string
 	{
 		return $this->gravatar
 			->buildUrl($email, $size);
-	}
-
-	/**
-	 * @return Gravatar\Gravatar
-	 */
-	public function getGravatarService()
-	{
-		return $this->gravatar;
 	}
 }

@@ -11,18 +11,8 @@ Gravatar creator for [Nette Framework](http://nette.org/)
 
 The best way to install ipub/gravatar is using  [Composer](http://getcomposer.org/):
 
-```json
-{
-	"require": {
-		"ipub/gravatar": "dev-master"
-	}
-}
-```
-
-or
-
 ```sh
-$ composer require ipub/gravatar:@dev
+$ composer require ipub/gravatar
 ```
 
 After that you have to register extension in config.neon.
