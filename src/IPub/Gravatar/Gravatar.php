@@ -334,7 +334,7 @@ final class Gravatar extends \Nette\Object
 		}
 
 		if (!$size || !$this->isSizeValid($size)) {
-			$size = NULL;
+			$size = $this->getSize();
 		}
 
 		// Check if avatar is in cache
@@ -428,7 +428,7 @@ final class Gravatar extends \Nette\Object
 		$url = new Nette\Http\Url(($this->useSecureUrl ? static::HTTPS_URL : static::HTTP_URL) . $emailHash);
 
 		if (!$size || !$this->isSizeValid($size)) {
-			$size = NULL;
+			$size = $this->getSize();
 		}
 
 		// Time to figure out our request params
