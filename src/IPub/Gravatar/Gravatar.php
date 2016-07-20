@@ -333,7 +333,7 @@ final class Gravatar extends \Nette\Object
 			throw new Exceptions\InvalidArgumentException('Inserted email is not valid email address');
 		}
 
-		if (!$size || !$this->isSizeValid($size)) {
+		if ($size !== NULL || !$this->isSizeValid($size)) {
 			$size = $this->getSize();
 		}
 
@@ -427,7 +427,7 @@ final class Gravatar extends \Nette\Object
 		// Start building the URL, and deciding if we're doing this via HTTPS or HTTP.
 		$url = new Nette\Http\Url(($this->useSecureUrl ? static::HTTPS_URL : static::HTTP_URL) . $emailHash);
 
-		if (!$size || !$this->isSizeValid($size)) {
+		if ($size !== NULL || !$this->isSizeValid($size)) {
 			$size = $this->getSize();
 		}
 
