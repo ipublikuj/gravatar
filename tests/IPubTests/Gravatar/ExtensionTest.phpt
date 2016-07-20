@@ -3,14 +3,14 @@
  * Test: IPub\Gravatar\Extension
  * @testCase
  *
- * @copyright	More in license.md
- * @license		http://www.ipublikuj.eu
- * @author		Adam Kadlec http://www.ipublikuj.eu
- * @package		iPublikuj:Gravatar!
- * @subpackage	Tests
- * @since		5.0
+ * @copyright      More in license.md
+ * @license        http://www.ipublikuj.eu
+ * @author         Adam Kadlec http://www.ipublikuj.eu
+ * @package        iPublikuj:Gravatar!
+ * @subpackage     Tests
+ * @since          1.0.0
  *
- * @date		10.01.15
+ * @date           10.01.15
  */
 
 namespace IPubTests\Gravatar;
@@ -28,7 +28,7 @@ require __DIR__ . '/../bootstrap.php';
 class ExtensionTest extends Tester\TestCase
 {
 	/**
-	 * @return \SystemContainer|\Nette\DI\Container
+	 * @return Nette\DI\Container
 	 */
 	protected function createContainer()
 	{
@@ -46,8 +46,8 @@ class ExtensionTest extends Tester\TestCase
 	{
 		$dic = $this->createContainer();
 
-		Assert::true($dic->getService('gravatar.gravatar') instanceof IPub\Gravatar\Gravatar);
-		Assert::true($dic->getService('gravatar.cache') instanceof IPub\Gravatar\Caching\GravatarCache);
+		Assert::true($dic->getService('gravatar.gravatar') instanceof Gravatar\Gravatar);
+		Assert::true($dic->getService('gravatar.cache') instanceof Gravatar\Caching\Cache);
 	}
 }
 

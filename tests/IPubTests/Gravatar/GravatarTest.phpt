@@ -3,14 +3,14 @@
  * Test: IPub\Gravatar\Gravatar
  * @testCase
  *
- * @copyright	More in license.md
- * @license		http://www.ipublikuj.eu
- * @author		Adam Kadlec http://www.ipublikuj.eu
- * @package		iPublikuj:Gravatar!
- * @subpackage	Tests
- * @since		5.0
+ * @copyright      More in license.md
+ * @license        http://www.ipublikuj.eu
+ * @author         Adam Kadlec http://www.ipublikuj.eu
+ * @package        iPublikuj:Gravatar!
+ * @subpackage     Tests
+ * @since          1.0.0
  *
- * @date		10.01.15
+ * @date           10.01.15
  */
 
 namespace IPubTests\Gravatar;
@@ -54,15 +54,14 @@ class GravatarTest extends Tester\TestCase
 	{
 		$this->gravatar->enableSecureImages();
 
-		Assert::equal('https://secure.gravatar.com/avatar/aabfda88704a1ab55db46d4116442222?s=80&r=g&d=mm', $this->gravatar->buildUrl('john.doe@ipublikuj.eu', null));
+		Assert::equal('https://secure.gravatar.com/avatar/aabfda88704a1ab55db46d4116442222?s=80&r=g&d=mm', $this->gravatar->buildUrl('john.doe@ipublikuj.eu', NULL));
 	}
 
 	public function testGravatarInitializedWithOptions()
 	{
-		$this->gravatar
-			->setSize(20)
-			->setMaxRating('g')
-			->setDefaultImage('mm');
+		$this->gravatar->setSize(20);
+		$this->gravatar->setMaxRating('g');
+		$this->gravatar->setDefaultImage('mm');
 
 		Assert::equal('http://www.gravatar.com/avatar/aabfda88704a1ab55db46d4116442222?s=20&r=g&d=mm', $this->gravatar->buildUrl('john.doe@ipublikuj.eu'));
 	}
@@ -74,7 +73,7 @@ class GravatarTest extends Tester\TestCase
 	}
 
 	/**
-	 * @return \SystemContainer|\Nette\DI\Container
+	 * @return Nette\DI\Container
 	 */
 	protected function createContainer()
 	{
