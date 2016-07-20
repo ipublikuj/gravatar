@@ -1,6 +1,7 @@
 # Gravatar
 
 [![Build Status](https://img.shields.io/travis/iPublikuj/gravatar.svg?style=flat-square)](https://travis-ci.org/iPublikuj/gravatar)
+[![Scrutinizer Code Coverage](https://img.shields.io/scrutinizer/coverage/g/iPublikuj/gravatar.svg?style=flat-square)](https://scrutinizer-ci.com/g/iPublikuj/gravatar/?branch=master)
 [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/iPublikuj/gravatar.svg?style=flat-square)](https://scrutinizer-ci.com/g/iPublikuj/gravatar/?branch=master)
 [![Latest Stable Version](https://img.shields.io/packagist/v/ipub/gravatar.svg?style=flat-square)](https://packagist.org/packages/ipub/gravatar)
 [![Composer Downloads](https://img.shields.io/packagist/dt/ipub/gravatar.svg?style=flat-square)](https://packagist.org/packages/ipub/gravatar)
