@@ -83,7 +83,7 @@ class GravatarTest extends Tester\TestCase
 
 		Gravatar\DI\GravatarExtension::register($config);
 
-		$config->addConfig(__DIR__ . '/files/config.neon', $config::NONE);
+		$config->addConfig(__DIR__ . '/files/config.neon');
 
 		return $config->createContainer();
 	}
