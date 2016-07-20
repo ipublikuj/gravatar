@@ -140,32 +140,38 @@ final class Gravatar extends \Nette\Object
 	 * Set the avatar size to use
 	 *
 	 * @param int $size - The avatar size to use, must be less than 512 and greater than 0.
-	 *
-	 * @throws Exceptions\InvalidArgumentException
 	 */
 	public function setSize(int $size)
 	{
-		if ($size > 512 || $size < 0) {
-			throw new Exceptions\InvalidArgumentException('Size must be within 0 pixels and 512 pixels');
+		if ($this->isSizeValid($size)) {
+			$this->size = $size;
 		}
-
-		$this->size = $size;
 	}
 
 	/**
 	 * Get the currently set avatar size
 	 *
-	 * @param int|NULL $size
-	 *
 	 * @return int
 	 */
-	public function getSize($size = NULL) : int
+	public function getSize() : int
 	{
-		if ($size !== NULL) {
-			return $size;
+		return $this->size;
+	}
+
+	/**
+	 * @param int $size
+	 *
+	 * @return bool
+	 *
+	 * @throws Exceptions\InvalidArgumentException
+	 */
+	public function isSizeValid(int $size) : bool
+	{
+		if ($size > 512 || $size < 0) {
+			throw new Exceptions\InvalidArgumentException('Size must be within 0 pixels and 512 pixels');
 		}
 
-		return $this->size;
+		return TRUE;
 	}
 
 	/**
@@ -327,13 +333,17 @@ final class Gravatar extends \Nette\Object
 			throw new Exceptions\InvalidArgumentException('Inserted email is not valid email address');
 		}
 
+		if (!$size || !$this->isSizeValid($size)) {
+			$size = NULL;
+		}
+
 		// Check if avatar is in cache
-		if (!$gravatar = $this->cache->load($this->getEmailHash($email) . '.' . $this->getSize($size))) {
+		if (!$gravatar = $this->cache->load($this->getEmailHash($email) . ($size ? '.' . $size : ''))) {
 			// Get gravatar content
 			$gravatar = @file_get_contents($this->buildUrl($email, $size));
 
 			// Store facebook avatar url into cache
-			$this->cache->save($this->getEmailHash($email) . '.' . $this->getSize($size), $gravatar, [
+			$this->cache->save($this->getEmailHash($email) . ($size ? '.' . $size : ''), $gravatar, [
 				Caching\Cache::EXPIRE => '7 days',
 			]);
 		}
@@ -417,9 +427,13 @@ final class Gravatar extends \Nette\Object
 		// Start building the URL, and deciding if we're doing this via HTTPS or HTTP.
 		$url = new Nette\Http\Url(($this->useSecureUrl ? static::HTTPS_URL : static::HTTP_URL) . $emailHash);
 
+		if (!$size || !$this->isSizeValid($size)) {
+			$size = NULL;
+		}
+
 		// Time to figure out our request params
 		$params = [
-			's' => $this->getSize($size),
+			's' => $size,
 			'r' => $this->getMaxRating($maxRating),
 			'd' => $this->getDefaultImage($defaultImage),
 			'f' => is_null($email) ? 'y' : NULL,
