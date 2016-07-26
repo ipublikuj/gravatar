@@ -4,7 +4,7 @@
 	"description"	: "Gravatar creator for Nette Framework",
 	"keywords"		: ["nette", "gravatar", "tools", "ipub", "ipublikuj"],
 	"homepage"		: "https://github.com/iPublikuj/gravatar",
-	"license"		: ["BSD-3-Clause", "GPL-2.0", "GPL-3.0"],
+	"license"		: ["GPL-2.0", "GPL-3.0"],
 
 	"authors": [
 		{
