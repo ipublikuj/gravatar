@@ -33,7 +33,7 @@ use IPub\Gravatar\Templating;
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-final class Gravatar extends \Nette\Object
+final class Gravatar extends Nette\Object
 {
 	/**
 	 * Define class name
