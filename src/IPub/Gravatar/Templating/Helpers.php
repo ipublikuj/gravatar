@@ -51,16 +51,6 @@ final class Helpers extends Nette\Object
 	}
 
 	/**
-	 * Register template filters
-	 *
-	 * @param Engine $engine
-	 */
-	public function register(Engine $engine)
-	{
-		$engine->addFilter('gravatar', [$this, 'gravatar']);
-	}
-
-	/**
 	 * @param string $email
 	 * @param int|NULL $size
 	 *
