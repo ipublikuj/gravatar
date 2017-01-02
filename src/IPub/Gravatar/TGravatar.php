@@ -22,7 +22,7 @@ namespace IPub\Gravatar;
  * @package        iPublikuj:Gravatar!
  * @subpackage     common
  *
- * @author         Adam Kadlec <adam.kadlec@fastybird.com>
+ * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
  */
 trait TGravatar
 {

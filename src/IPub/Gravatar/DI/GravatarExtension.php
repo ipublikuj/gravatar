@@ -31,7 +31,7 @@ use IPub\Gravatar\Templating;
  * @package        iPublikuj:Gravatar!
  * @subpackage     DI
  *
- * @author         Adam Kadlec <adam.kadlec@fastybird.com>
+ * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
  */
 final class GravatarExtension extends DI\CompilerExtension
 {
