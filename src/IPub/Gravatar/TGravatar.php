@@ -22,7 +22,7 @@ namespace IPub\Gravatar;
  * @package        iPublikuj:Gravatar!
  * @subpackage     common
  *
- * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
+ * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
 trait TGravatar
 {
@@ -33,6 +33,8 @@ trait TGravatar
 
 	/**
 	 * @param Gravatar $gravatar
+	 *
+	 * @return void
 	 */
 	public function injectGravatar(Gravatar $gravatar)
 	{

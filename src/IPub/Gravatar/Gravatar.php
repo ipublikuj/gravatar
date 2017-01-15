@@ -31,15 +31,10 @@ use IPub\Gravatar\Templating;
  * @package        iPublikuj:Gravatar!
  * @subpackage     common
  *
- * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
+ * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
 final class Gravatar extends Nette\Object
 {
-	/**
-	 * Define class name
-	 */
-	const CLASS_NAME = __CLASS__;
-
 	/**
 	 * @var string - URL constants for the avatar images
 	 */
@@ -139,7 +134,9 @@ final class Gravatar extends Nette\Object
 	/**
 	 * Set the avatar size to use
 	 *
-	 * @param int $size - The avatar size to use, must be less than 512 and greater than 0.
+	 * @param int $size - The avatar size to use, must be less than 512 and greater than 0
+	 *
+	 * @return void
 	 */
 	public function setSize(int $size)
 	{
@@ -178,6 +175,8 @@ final class Gravatar extends Nette\Object
 	 * Set image cache expiration
 	 *
 	 * @param int $expiration
+	 *
+	 * @return void
 	 */
 	public function setExpiration(int $expiration)
 	{
@@ -188,6 +187,8 @@ final class Gravatar extends Nette\Object
 	 * Set the default image to use for avatars
 	 *
 	 * @param mixed $image - The default image to use. Use boolean FALSE for the gravatar default, a string containing a valid image URL, or a string specifying a recognized gravatar "default".
+	 *
+	 * @return void
 	 *
 	 * @throws Exceptions\InvalidArgumentException
 	 */
@@ -239,7 +240,9 @@ final class Gravatar extends Nette\Object
 	/**
 	 * Set the maximum allowed rating for avatars.
 	 *
-	 * @param string $rating - The maximum rating to use for avatars ('g', 'pg', 'r', 'x').
+	 * @param string $rating - The maximum rating to use for avatars ('g', 'pg', 'r', 'x')
+	 *
+	 * @return void
 	 *
 	 * @throws Exceptions\InvalidArgumentException
 	 */
@@ -302,6 +305,8 @@ final class Gravatar extends Nette\Object
 
 	/**
 	 * Enable the use of the secure protocol for image URLs
+	 *
+	 * @return void
 	 */
 	public function enableSecureImages()
 	{
@@ -310,6 +315,8 @@ final class Gravatar extends Nette\Object
 
 	/**
 	 * Disable the use of the secure protocol for image URLs
+	 *
+	 * @return void
 	 */
 	public function disableSecureImages()
 	{

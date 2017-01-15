@@ -30,7 +30,7 @@ use IPub\Gravatar\Exceptions;
  * @package        iPublikuj:Gravatar!
  * @subpackage     Application
  *
- * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
+ * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
 final class GravatarResponse extends Nette\Object implements Nette\Application\IResponse
 {
@@ -90,7 +90,7 @@ final class GravatarResponse extends Nette\Object implements Nette\Application\I
 	 *
 	 * @return Utils\Image
 	 */
-	public function getImage()
+	public function getImage() : Utils\Image
 	{
 		return $this->image;
 	}
@@ -101,7 +101,7 @@ final class GravatarResponse extends Nette\Object implements Nette\Application\I
 	 *
 	 * @return string
 	 */
-	public function getType()
+	public function getType() : string
 	{
 		return $this->type;
 	}

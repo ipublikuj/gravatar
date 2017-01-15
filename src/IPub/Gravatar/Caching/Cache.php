@@ -25,19 +25,16 @@ use Nette\Caching;
  * @package        iPublikuj:Gravatar!
  * @subpackage     Caching
  *
- * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
+ * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
 final class Cache extends Caching\Cache
 {
 	/**
-	 * Define class name
-	 */
-	const CLASS_NAME = __CLASS__;
-
-	/**
 	 * Remove all items cached by extension
 	 *
 	 * @param array $conditions
+	 *
+	 * @return void
 	 */
 	public function clean(array $conditions = NULL)
 	{

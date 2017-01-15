@@ -7,9 +7,11 @@ env:
 php:
   - 7.0
 
+before_install:
+  - composer self-update
+
 before_script:
   - php .travis.composer.php
-  - composer self-update
   - composer install --no-interaction --prefer-source --dev
 
 script:

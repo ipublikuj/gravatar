@@ -19,6 +19,16 @@
 		"issues"	:"https://github.com/iPublikuj/gravatar/issues"
 	},
 
+	"extra": {
+		"ipub"	: {
+			"configuration" : {
+				"extensions" : {
+					"gravatar" : "IPub\\Gravatar\\DI\\GravatarExtension"
+				}
+			}
+		}
+	},
+
 	"require": {
 		"php"	: ">=7.0.0",
 

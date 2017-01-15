@@ -28,15 +28,10 @@ use IPub\Gravatar;
  * @package        iPublikuj:Gravatar!
  * @subpackage     Templating
  *
- * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
+ * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
 final class Helpers extends Nette\Object
 {
-	/**
-	 * Define class name
-	 */
-	const CLASS_NAME = __CLASS__;
-
 	/**
 	 * @var Gravatar\Gravatar
 	 */

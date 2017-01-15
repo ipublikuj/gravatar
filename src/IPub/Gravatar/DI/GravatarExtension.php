@@ -17,6 +17,7 @@ declare(strict_types = 1);
 namespace IPub\Gravatar\DI;
 
 use Nette;
+use Nette\Bridges;
 use Nette\DI;
 use Nette\PhpGenerator as Code;
 
@@ -31,19 +32,22 @@ use IPub\Gravatar\Templating;
  * @package        iPublikuj:Gravatar!
  * @subpackage     DI
  *
- * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
+ * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
 final class GravatarExtension extends DI\CompilerExtension
 {
 	/**
 	 * @var array
 	 */
-	protected $defaults = [
+	private $defaults = [
 		'expiration'   => 172800,
 		'size'         => 80,
 		'defaultImage' => FALSE
 	];
 
+	/**
+	 * @return void
+	 */
 	public function loadConfiguration()
 	{
 		// Get container builder
@@ -53,19 +57,19 @@ final class GravatarExtension extends DI\CompilerExtension
 
 		// Install Gravatar service
 		$builder->addDefinition($this->prefix('gravatar'))
-			->setClass(Gravatar\Gravatar::CLASS_NAME)
+			->setClass(Gravatar\Gravatar::class)
 			->addSetup('setSize', [$configuration['size']])
 			->addSetup('setExpiration', [$configuration['expiration']])
 			->addSetup('setDefaultImage', [$configuration['defaultImage']]);
 
 		// Create cache services
 		$builder->addDefinition($this->prefix('cache'))
-			->setClass(Caching\Cache::CLASS_NAME, ['@cacheStorage', 'IPub.Gravatar'])
+			->setClass(Caching\Cache::class, ['@cacheStorage', 'IPub.Gravatar'])
 			->setInject(FALSE);
 
 		// Register template helpers
 		$builder->addDefinition($this->prefix('helpers'))
-			->setClass(Templating\Helpers::CLASS_NAME)
+			->setClass(Templating\Helpers::class)
 			->setFactory($this->prefix('@gravatar') . '::createTemplateHelpers')
 			->setInject(FALSE);
 	}
@@ -75,11 +79,13 @@ final class GravatarExtension extends DI\CompilerExtension
 	 */
 	public function beforeCompile()
 	{
+		parent::beforeCompile();
+
 		// Get container builder
 		$builder = $this->getContainerBuilder();
 
 		// Install extension latte macros
-		$latteFactory = $builder->getDefinition($builder->getByType(Nette\Bridges\ApplicationLatte\ILatteFactory::class) ?: 'nette.latteFactory');
+		$latteFactory = $builder->getDefinition($builder->getByType(Bridges\ApplicationLatte\ILatteFactory::class) ?: 'nette.latteFactory');
 
 		$latteFactory
 			->addSetup('IPub\Gravatar\Latte\Macros::install(?->getCompiler())', ['@self'])
@@ -89,6 +95,8 @@ final class GravatarExtension extends DI\CompilerExtension
 	/**
 	 * @param Nette\Configurator $config
 	 * @param string $extensionName
+	 *
+	 * @return void
 	 */
 	public static function register(Nette\Configurator $config, string $extensionName = 'gravatar')
 	{

@@ -13,6 +13,8 @@
  * @date           10.01.15
  */
 
+declare(strict_types = 1);
+
 namespace IPubTests\Gravatar;
 
 use Nette;
@@ -23,7 +25,7 @@ use Tester\Assert;
 use IPub;
 use IPub\Gravatar;
 
-require __DIR__ . '/../bootstrap.php';
+require __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'bootstrap.php';
 
 class GravatarTest extends Tester\TestCase
 {
@@ -33,7 +35,7 @@ class GravatarTest extends Tester\TestCase
 	private $gravatar;
 
 	/**
-	 * Set up
+	 * {@inheritdoc}
 	 */
 	public function setUp()
 	{
@@ -75,14 +77,14 @@ class GravatarTest extends Tester\TestCase
 	/**
 	 * @return Nette\DI\Container
 	 */
-	protected function createContainer()
+	protected function createContainer() : Nette\DI\Container
 	{
 		$config = new Nette\Configurator();
 		$config->setTempDirectory(TEMP_DIR);
 
 		Gravatar\DI\GravatarExtension::register($config);
 
-		$config->addConfig(__DIR__ . '/files/config.neon');
+		$config->addConfig(__DIR__ . DS . 'files' . DS . 'config.neon');
 
 		return $config->createContainer();
 	}
