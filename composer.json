@@ -37,7 +37,9 @@
 		"nette/http"		: "~2.3",
 		"nette/utils"		: "~2.3",
 
-		"latte/latte"	: "~2.3"
+		"latte/latte"	: "~2.3",
+
+		"pds/skeleton"	: "@dev"
 	},
 
 	"require-dev": {

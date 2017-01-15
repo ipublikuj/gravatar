@@ -29,6 +29,7 @@ function id($val)
 	return $val;
 }
 
-function run(Tester\TestCase $testCase) {
+function run(Tester\TestCase $testCase)
+{
 	$testCase->run();
 }
