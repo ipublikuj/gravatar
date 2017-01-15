@@ -83,12 +83,12 @@ class TemplateTest extends Tester\TestCase
 		$nMacro = $dq->find('img[id*="nMacro"]');
 		$nMacro = (string) $nMacro[0]->attributes()->{'src'};
 
-		Assert::equal($this->gravatar->get('john@doe.com', 100), $nMacro);
+		Assert::equal($this->gravatar->buildUrl('john@doe.com', 100), $nMacro);
 
 		$nMacro = $dq->find('img[id*="normalMacro"]');
 		$nMacro = (string) $nMacro[0]->attributes()->{'src'};
 
-		Assert::equal($this->gravatar->get('john@doe.com', 100), $nMacro);
+		Assert::equal($this->gravatar->buildUrl('john@doe.com', 100), $nMacro);
 	}
 
 	/**
