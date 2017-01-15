@@ -77,15 +77,15 @@ class TemplateTest extends Tester\TestCase
 
 		$dq = Tester\DomQuery::fromHtml((string) $response->getSource());
 
-		Assert::true($dq->has('div[id*="nMacro"]'));
-		Assert::true($dq->has('div[id*="normalMacro"]'));
+		Assert::true($dq->has('img[id*="nMacro"]'));
+		Assert::true($dq->has('img[id*="normalMacro"]'));
 
-		$nMacro = $dq->find('div[id*="nMacro"]');
+		$nMacro = $dq->find('img[id*="nMacro"]');
 		$nMacro = (string) $nMacro[0]->attributes()->{'src'};
 
 		Assert::equal($this->gravatar->get('john@doe.com', 100), $nMacro);
 
-		$nMacro = $dq->find('div[id*="normalMacro"]');
+		$nMacro = $dq->find('img[id*="normalMacro"]');
 		$nMacro = (string) $nMacro[0]->attributes()->{'src'};
 
 		Assert::equal($this->gravatar->get('john@doe.com', 100), $nMacro);
