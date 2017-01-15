@@ -56,4 +56,12 @@ final class Helpers extends Nette\Object
 		return $this->gravatar
 			->buildUrl($email, $size);
 	}
+
+	/**
+	 * @return Gravatar\Gravatar
+	 */
+	public function getGravatarService() : Gravatar\Gravatar
+	{
+		return $this->gravatar;
+	}
 }

@@ -89,7 +89,8 @@ final class GravatarExtension extends DI\CompilerExtension
 
 		$latteFactory
 			->addSetup('IPub\Gravatar\Latte\Macros::install(?->getCompiler())', ['@self'])
-			->addSetup('addFilter', ['gravatar', [$this->prefix('@helpers'), 'gravatar']]);
+			->addSetup('addFilter', ['gravatar', [$this->prefix('@helpers'), 'gravatar']])
+			->addSetup('addFilter', ['getGravatarService', [$this->prefix('@helpers'), 'getGravatarService']]);
 	}
 
 	/**

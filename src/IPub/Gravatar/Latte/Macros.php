@@ -71,7 +71,10 @@ final class Macros extends MacroSet
 			throw new Latte\CompileException('Please provide email address.');
 		}
 
-		return $writer->write('echo %escape(call_user_func($this->filters->gravatar, ' . $arguments["email"] . ', ' . $arguments["size"] . '))');
+		return $writer->write('
+			$_resultG = property_exists($this, "filters") ? %escape(call_user_func($this->filters->gravatar, ' . $arguments['email'] . ', ' . $arguments['size'] . ') : $template->getGravatarService()->buildUrl(' . $arguments['email'] . ', ' . $arguments['size'] . ');
+			echo $_resultG;
+			');
 	}
 
 
@@ -91,7 +94,10 @@ final class Macros extends MacroSet
 			throw new Latte\CompileException('Please provide email address.');
 		}
 
-		return $writer->write('?> ' . ($node->htmlNode->name === 'a' ? 'href' : 'src') . '="<?php echo %escape(call_user_func($this->filters->gravatar, ' . $arguments['email'] . ', ' . $arguments['size'] . '))?>" <?php');
+		return $writer->write('?> ' . ($node->htmlNode->name === 'a' ? 'href' : 'src') . '="<?php
+			$_resultG = property_exists($this, "filters") ? %escape(call_user_func($this->filters->gravatar, ' . $arguments['email'] . ', ' . $arguments['size'] . ') : $template->getGravatarService()->buildUrl(' . $arguments['email'] . ', ' . $arguments['size'] . ');
+			echo $_resultG;
+		?>" <?php');
 	}
 
 
@@ -104,7 +110,7 @@ final class Macros extends MacroSet
 	{
 		$arguments = array_map(function ($value) {
 			return trim($value);
-		}, explode(",", $macro));
+		}, explode(',', $macro));
 
 		$name = $arguments[0];
 		$size = (isset($arguments[1]) && !empty($arguments[1])) ? $arguments[1] : NULL;
