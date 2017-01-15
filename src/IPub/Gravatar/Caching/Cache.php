@@ -25,7 +25,7 @@ use Nette\Caching;
  * @package        iPublikuj:Gravatar!
  * @subpackage     Caching
  *
- * @author         Adam Kadlec <adam.kadlec@fastybird.com>
+ * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
  */
 final class Cache extends Caching\Cache
 {

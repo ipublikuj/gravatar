@@ -30,7 +30,7 @@ use Latte\Macros\MacroSet;
  * @package        iPublikuj:Gravatar!
  * @subpackage     Latte
  *
- * @author         Adam Kadlec <adam.kadlec@fastybird.com>
+ * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
  */
 final class Macros extends MacroSet
 {

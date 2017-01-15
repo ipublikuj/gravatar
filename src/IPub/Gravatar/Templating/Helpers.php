@@ -28,7 +28,7 @@ use IPub\Gravatar;
  * @package        iPublikuj:Gravatar!
  * @subpackage     Templating
  *
- * @author         Adam Kadlec <adam.kadlec@fastybird.com>
+ * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
  */
 final class Helpers extends Nette\Object
 {

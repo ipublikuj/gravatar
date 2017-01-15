@@ -30,7 +30,7 @@ use IPub\Gravatar\Exceptions;
  * @package        iPublikuj:Gravatar!
  * @subpackage     Application
  *
- * @author         Adam Kadlec <adam.kadlec@fastybird.com>
+ * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
  */
 final class GravatarResponse extends Nette\Object implements Nette\Application\IResponse
 {

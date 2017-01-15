@@ -31,7 +31,7 @@ use IPub\Gravatar\Templating;
  * @package        iPublikuj:Gravatar!
  * @subpackage     common
  *
- * @author         Adam Kadlec <adam.kadlec@fastybird.com>
+ * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
  */
 final class Gravatar extends Nette\Object
 {

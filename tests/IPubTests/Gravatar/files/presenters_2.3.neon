@@ -1,0 +1,11 @@
+nette:
+	application:
+		mapping:
+			*: IPubTests\Gravatar\*Presenter
+
+services:
+	# Test presenter
+	presenters.test:
+		class: IPubTests\Gravatar\TestPresenter
+
+	router: IPubTests\Gravatar\Libs\RouterFactory::createRouter
