@@ -72,7 +72,7 @@ final class Macros extends MacroSet
 		}
 
 		return $writer->write('
-			$_resultG = property_exists($this, "filters") ? %escape(call_user_func($this->filters->gravatar, ' . $arguments['email'] . ', ' . $arguments['size'] . ') : $template->getGravatarService()->buildUrl(' . $arguments['email'] . ', ' . $arguments['size'] . ');
+			$_resultG = property_exists($this, "filters") ? %escape(call_user_func($this->filters->gravatar, ' . $arguments['email'] . ', ' . $arguments['size'] . ')) : $template->getGravatarService()->buildUrl(' . $arguments['email'] . ', ' . $arguments['size'] . ');
 			echo $_resultG;
 			');
 	}
@@ -95,7 +95,7 @@ final class Macros extends MacroSet
 		}
 
 		return $writer->write('?> ' . ($node->htmlNode->name === 'a' ? 'href' : 'src') . '="<?php
-			$_resultG = property_exists($this, "filters") ? %escape(call_user_func($this->filters->gravatar, ' . $arguments['email'] . ', ' . $arguments['size'] . ') : $template->getGravatarService()->buildUrl(' . $arguments['email'] . ', ' . $arguments['size'] . ');
+			$_resultG = property_exists($this, "filters") ? %escape(call_user_func($this->filters->gravatar, ' . $arguments['email'] . ', ' . $arguments['size'] . ')) : $template->getGravatarService()->buildUrl(' . $arguments['email'] . ', ' . $arguments['size'] . ');
 			echo $_resultG;
 		?>" <?php');
 	}
