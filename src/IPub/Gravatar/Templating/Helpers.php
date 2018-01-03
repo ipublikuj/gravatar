@@ -30,8 +30,10 @@ use IPub\Gravatar;
  *
  * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
  */
-final class Helpers extends Nette\Object
+final class Helpers
 {
+	use Nette\SmartObject;
+
 	/**
 	 * @var Gravatar\Gravatar
 	 */
