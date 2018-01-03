@@ -36,6 +36,7 @@ use IPub\Gravatar\Templating;
 final class Gravatar
 {
 	use Nette\SmartObject;
+	
 	/**
 	 * @var string - URL constants for the avatar images
 	 */
