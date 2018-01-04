@@ -33,8 +33,10 @@ use IPub\Gravatar\Templating;
  *
  * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
  */
-final class Gravatar extends Nette\Object
+final class Gravatar
 {
+	use Nette\SmartObject;
+	
 	/**
 	 * @var string - URL constants for the avatar images
 	 */

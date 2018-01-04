@@ -32,8 +32,10 @@ use IPub\Gravatar\Exceptions;
  *
  * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
  */
-final class GravatarResponse extends Nette\Object implements Nette\Application\IResponse
+final class GravatarResponse implements Nette\Application\IResponse
 {
+	use Nette\SmartObject;
+
 	/**
 	 * @var Utils\Image
 	 */
