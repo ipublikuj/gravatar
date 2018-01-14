@@ -32,6 +32,9 @@ use IPub\Gravatar;
  */
 final class Helpers
 {
+	/**
+	 * Implement nette smart magic
+	 */
 	use Nette\SmartObject;
 
 	/**

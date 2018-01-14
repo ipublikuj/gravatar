@@ -37,19 +37,19 @@
 		"nette/http"		: "~2.4",
 		"nette/utils"		: "~2.4",
 
-		"latte/latte"	: "~2.4",
-
-		"pds/skeleton"	: "@dev"
+		"latte/latte"	: "~2.4"
 	},
 
 	"require-dev": {
-		"nette/bootstrap"		: "~2.3",
-		"nette/mail"			: "~2.3",
+		"nette/bootstrap"		: "~2.4",
+		"nette/mail"			: "~2.4",
+		"nette/robot-loader"	: "~2.4",
 		"nette/safe-stream"		: "~2.3",
-		"nette/robot-loader"	: "~2.3",
-		"nette/tester"			: "@dev",
+		"nette/tester"			: "~2.0",
 
-		"tracy/tracy"	: "@dev"
+		"tracy/tracy"	: "~2.4",
+
+		"pds/skeleton"	: "~1.0"
 	},
 
 	"autoload": {

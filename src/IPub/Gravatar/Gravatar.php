@@ -35,8 +35,11 @@ use IPub\Gravatar\Templating;
  */
 final class Gravatar
 {
+	/**
+	 * Implement nette smart magic
+	 */
 	use Nette\SmartObject;
-	
+
 	/**
 	 * @var string - URL constants for the avatar images
 	 */
@@ -140,7 +143,7 @@ final class Gravatar
 	 *
 	 * @return void
 	 */
-	public function setSize(int $size)
+	public function setSize(int $size) : void
 	{
 		if ($this->isSizeValid($size)) {
 			$this->size = $size;
@@ -180,7 +183,7 @@ final class Gravatar
 	 *
 	 * @return void
 	 */
-	public function setExpiration(int $expiration)
+	public function setExpiration(int $expiration) : void
 	{
 		$this->expiration = $expiration;
 	}
@@ -194,7 +197,7 @@ final class Gravatar
 	 *
 	 * @throws Exceptions\InvalidArgumentException
 	 */
-	public function setDefaultImage($image)
+	public function setDefaultImage($image) : void
 	{
 		// Quick check against boolean FALSE.
 		if ($image === FALSE) {
@@ -226,7 +229,7 @@ final class Gravatar
 	 *
 	 * @return mixed - False if no default image set, string if one is set
 	 */
-	public function getDefaultImage(string $defaultImage = NULL)
+	public function getDefaultImage(string $defaultImage = NULL) : void
 	{
 		if ($defaultImage !== NULL && in_array($defaultImage, ['404', 'mm', 'identicon', 'monsterid', 'wavatar', 'retro'])) {
 			return $defaultImage;
@@ -248,7 +251,7 @@ final class Gravatar
 	 *
 	 * @throws Exceptions\InvalidArgumentException
 	 */
-	public function setMaxRating(string $rating)
+	public function setMaxRating(string $rating) : void
 	{
 		$rating = strtolower($rating);
 
@@ -310,7 +313,7 @@ final class Gravatar
 	 *
 	 * @return void
 	 */
-	public function enableSecureImages()
+	public function enableSecureImages() : void
 	{
 		$this->useSecureUrl = TRUE;
 	}
@@ -320,7 +323,7 @@ final class Gravatar
 	 *
 	 * @return void
 	 */
-	public function disableSecureImages()
+	public function disableSecureImages() : void
 	{
 		$this->useSecureUrl = FALSE;
 	}
@@ -397,7 +400,7 @@ final class Gravatar
 	 *
 	 * @return bool|NULL Boolean if we could connect, null if no connection to gravatar.com
 	 */
-	public function exists(string $email)
+	public function exists(string $email) : ?bool
 	{
 		$path = $this->buildUrl($email, NULL, NULL, '404');
 

@@ -36,7 +36,7 @@ trait TGravatar
 	 *
 	 * @return void
 	 */
-	public function injectGravatar(Gravatar $gravatar)
+	public function injectGravatar(Gravatar $gravatar) : void
 	{
 		$this->gravatar = $gravatar;
 	}

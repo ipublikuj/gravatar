@@ -34,6 +34,9 @@ use IPub\Gravatar\Exceptions;
  */
 final class GravatarResponse implements Nette\Application\IResponse
 {
+	/**
+	 * Implement nette smart magic
+	 */
 	use Nette\SmartObject;
 
 	/**
@@ -117,7 +120,7 @@ final class GravatarResponse implements Nette\Application\IResponse
 	 *
 	 * @return void
 	 */
-	public function send(Http\IRequest $httpRequest, Http\IResponse $httpResponse)
+	public function send(Http\IRequest $httpRequest, Http\IResponse $httpResponse) : void
 	{
 		echo $this->image->send($this->type, 85);
 	}

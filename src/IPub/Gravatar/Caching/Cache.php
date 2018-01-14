@@ -36,7 +36,7 @@ final class Cache extends Caching\Cache
 	 *
 	 * @return void
 	 */
-	public function clean(array $conditions = NULL)
+	public function clean(array $conditions = NULL) : void
 	{
 		parent::clean([self::TAGS => ['ipub.gravatar']]);
 	}
