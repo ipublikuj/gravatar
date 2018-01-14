@@ -229,7 +229,7 @@ final class Gravatar
 	 *
 	 * @return mixed - False if no default image set, string if one is set
 	 */
-	public function getDefaultImage(string $defaultImage = NULL) : void
+	public function getDefaultImage(string $defaultImage = NULL) : ?string
 	{
 		if ($defaultImage !== NULL && in_array($defaultImage, ['404', 'mm', 'identicon', 'monsterid', 'wavatar', 'retro'])) {
 			return $defaultImage;

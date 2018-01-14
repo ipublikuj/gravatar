@@ -2,6 +2,7 @@ language: php
 
 env:
   - NETTE=default
+  - NETTE=~2.4.0
 
 php:
   - 7.1
