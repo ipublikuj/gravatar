@@ -6,7 +6,6 @@
 [![Latest Stable Version](https://img.shields.io/packagist/v/ipub/gravatar.svg?style=flat-square)](https://packagist.org/packages/ipub/gravatar)
 [![Composer Downloads](https://img.shields.io/packagist/dt/ipub/gravatar.svg?style=flat-square)](https://packagist.org/packages/ipub/gravatar)
 [![License](https://img.shields.io/packagist/l/ipub/gravatar.svg?style=flat-square)](https://packagist.org/packages/ipub/gravatar)
-[![Dependency Status](https://img.shields.io/versioneye/d/user/projects/578f760a0ca92d00468a3b53.svg?style=flat-square)](https://www.versioneye.com/user/projects/578f760a0ca92d00468a3b53)
 
 Gravatar creator for [Nette Framework](http://nette.org/)
 
