@@ -63,7 +63,8 @@ final class GravatarExtension extends DI\CompilerExtension
 
 		// Create cache services
 		$builder->addDefinition($this->prefix('cache'))
-			->setType(Caching\Cache::class, ['@cacheStorage', 'IPub.Gravatar'])
+			->setType(Caching\Cache::class)
+			->setArguments(['@cacheStorage', 'IPub.Gravatar'])
 			->setInject(FALSE);
 
 		// Register template helpers

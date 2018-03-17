@@ -102,7 +102,7 @@ final class Macros extends MacroSet
 	 */
 	public static function prepareMacroArguments(string $macro) : array
 	{
-		$arguments = array_map(function ($value) {
+		$arguments = array_map(function ($value) : string {
 			return trim($value);
 		}, explode(',', $macro));
 
