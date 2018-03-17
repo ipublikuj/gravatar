@@ -3,8 +3,8 @@
  * GravatarExtension.php
  *
  * @copyright      More in license.md
- * @license        http://www.ipublikuj.eu
- * @author         Adam Kadlec http://www.ipublikuj.eu
+ * @license        https://www.ipublikuj.eu
+ * @author         Adam Kadlec https://www.ipublikuj.eu
  * @package        iPublikuj:Gravatar!
  * @subpackage     Application
  * @since          1.0.0

@@ -29,4 +29,4 @@ extensions:
 Learn how to show and get users gravatars in [documentation](https://github.com/iPublikuj/gravatar/blob/master/docs/en/index.md).
 
 ***
-Homepage [http://www.ipublikuj.eu](http://www.ipublikuj.eu) and repository [http://github.com/iPublikuj/gravatar](http://github.com/iPublikuj/gravatar).
+Homepage [https://www.ipublikuj.eu](https://www.ipublikuj.eu) and repository [http://github.com/iPublikuj/gravatar](http://github.com/iPublikuj/gravatar).
