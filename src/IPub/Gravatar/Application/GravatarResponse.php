@@ -20,7 +20,6 @@ use Nette;
 use Nette\Utils;
 use Nette\Http;
 
-use IPub;
 use IPub\Gravatar;
 use IPub\Gravatar\Exceptions;
 

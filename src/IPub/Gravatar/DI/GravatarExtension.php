@@ -21,7 +21,6 @@ use Nette\Bridges;
 use Nette\DI;
 use Nette\PhpGenerator as Code;
 
-use IPub;
 use IPub\Gravatar;
 use IPub\Gravatar\Caching;
 use IPub\Gravatar\Templating;
@@ -57,19 +56,19 @@ final class GravatarExtension extends DI\CompilerExtension
 
 		// Install Gravatar service
 		$builder->addDefinition($this->prefix('gravatar'))
-			->setClass(Gravatar\Gravatar::class)
+			->setType(Gravatar\Gravatar::class)
 			->addSetup('setSize', [$configuration['size']])
 			->addSetup('setExpiration', [$configuration['expiration']])
 			->addSetup('setDefaultImage', [$configuration['defaultImage']]);
 
 		// Create cache services
 		$builder->addDefinition($this->prefix('cache'))
-			->setClass(Caching\Cache::class, ['@cacheStorage', 'IPub.Gravatar'])
+			->setType(Caching\Cache::class, ['@cacheStorage', 'IPub.Gravatar'])
 			->setInject(FALSE);
 
 		// Register template helpers
 		$builder->addDefinition($this->prefix('helpers'))
-			->setClass(Templating\Helpers::class)
+			->setType(Templating\Helpers::class)
 			->setFactory($this->prefix('@gravatar') . '::createTemplateHelpers')
 			->setInject(FALSE);
 	}
@@ -99,7 +98,7 @@ final class GravatarExtension extends DI\CompilerExtension
 	 *
 	 * @return void
 	 */
-	public static function register(Nette\Configurator $config, string $extensionName = 'gravatar')
+	public static function register(Nette\Configurator $config, string $extensionName = 'gravatar') : void
 	{
 		$config->onCompile[] = function (Nette\Configurator $config, Nette\DI\Compiler $compiler) use ($extensionName) : void {
 			$compiler->addExtension($extensionName, new GravatarExtension());

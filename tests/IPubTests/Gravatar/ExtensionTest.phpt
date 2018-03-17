@@ -22,14 +22,13 @@ use Nette;
 use Tester;
 use Tester\Assert;
 
-use IPub;
 use IPub\Gravatar;
 
 require __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'bootstrap.php';
 
 class ExtensionTest extends Tester\TestCase
 {
-	public function testFunctional()
+	public function testFunctional() : void
 	{
 		$dic = $this->createContainer();
 

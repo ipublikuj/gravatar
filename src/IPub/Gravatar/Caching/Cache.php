@@ -16,7 +16,6 @@ declare(strict_types = 1);
 
 namespace IPub\Gravatar\Caching;
 
-use Nette;
 use Nette\Caching;
 
 /**

@@ -26,7 +26,6 @@ use Nette\Utils;
 use Tester;
 use Tester\Assert;
 
-use IPub;
 use IPub\Gravatar;
 
 require __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'bootstrap.php';
@@ -52,7 +51,7 @@ class TemplateTest extends Tester\TestCase
 	/**
 	 * {@inheritdoc}
 	 */
-	public function setUp()
+	public function setUp() : void
 	{
 		parent::setUp();
 
@@ -65,7 +64,7 @@ class TemplateTest extends Tester\TestCase
 		$this->gravatar = $this->container->getByType(Gravatar\Gravatar::class);
 	}
 
-	public function testMobileVersion()
+	public function testMacroVersion() : void
 	{
 		// Create test presenter
 		$presenter = $this->createPresenter();
@@ -128,7 +127,7 @@ class TestPresenter extends UI\Presenter
 {
 	use Gravatar\TGravatar;
 
-	public function renderDefault()
+	public function renderDefault() : void
 	{
 		// Set template for component testing
 		$this->template->setFile(__DIR__ . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . 'default.latte');

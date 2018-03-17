@@ -20,7 +20,6 @@ use Nette;
 use Nette\Http;
 use Nette\Utils;
 
-use IPub;
 use IPub\Gravatar\Caching;
 use IPub\Gravatar\Exceptions;
 use IPub\Gravatar\Templating;
@@ -43,8 +42,8 @@ final class Gravatar
 	/**
 	 * @var string - URL constants for the avatar images
 	 */
-	const HTTP_URL = 'http://www.gravatar.com/avatar/';
-	const HTTPS_URL = 'https://secure.gravatar.com/avatar/';
+	public const HTTP_URL = 'http://www.gravatar.com/avatar/';
+	public const HTTPS_URL = 'https://secure.gravatar.com/avatar/';
 
 	/**
 	 * @var int
@@ -121,7 +120,7 @@ final class Gravatar
 	 *
 	 * @return string - The hashed form of the email, post cleaning
 	 */
-	public function getEmailHash(string $email = NULL) : string
+	public function getEmailHash(?string $email = NULL) : string
 	{
 		// Tack the email hash onto the end.
 		if ($this->hashEmail === TRUE && $email !== NULL) {
@@ -229,7 +228,7 @@ final class Gravatar
 	 *
 	 * @return mixed - False if no default image set, string if one is set
 	 */
-	public function getDefaultImage(string $defaultImage = NULL) : ?string
+	public function getDefaultImage(?string $defaultImage = NULL) : ?string
 	{
 		if ($defaultImage !== NULL && in_array($defaultImage, ['404', 'mm', 'identicon', 'monsterid', 'wavatar', 'retro'])) {
 			return $defaultImage;
@@ -269,7 +268,7 @@ final class Gravatar
 	 *
 	 * @return string - The string representing the current maximum allowed rating ('g', 'pg', 'r', 'x').
 	 */
-	public function getMaxRating(string $maxRating = NULL) : string
+	public function getMaxRating(?string $maxRating = NULL) : string
 	{
 		if ($maxRating !== NULL && in_array($maxRating, ['g', 'pg', 'r', 'x'])) {
 			return $maxRating;
@@ -338,7 +337,7 @@ final class Gravatar
 	 *
 	 * @throws Exceptions\InvalidArgumentException
 	 */
-	public function get(string $email = NULL, int $size = NULL) : Utils\Image
+	public function get(?string $email = NULL, ?int $size = NULL) : Utils\Image
 	{
 		// Set user email address
 		if ($email !== NULL && !Utils\Validators::isEmail($email)) {
@@ -378,7 +377,7 @@ final class Gravatar
 	 *
 	 * @throws Exceptions\InvalidArgumentException
 	 */
-	public function buildUrl(string $email = NULL, int $size = NULL, string $maxRating = NULL, string $defaultImage = NULL) : string
+	public function buildUrl(?string $email = NULL, ?int $size = NULL, ?string $maxRating = NULL, ?string $defaultImage = NULL) : string
 	{
 		// Set user email address
 		if ($email !== NULL && !Utils\Validators::isEmail($email)) {
@@ -431,7 +430,7 @@ final class Gravatar
 	 *
 	 * @return Http\Url
 	 */
-	private function createUrl(string $email, int $size = NULL, string $maxRating = NULL, string $defaultImage = NULL) : Http\Url
+	private function createUrl(string $email, ?int $size = NULL, ?string $maxRating = NULL, ?string $defaultImage = NULL) : Http\Url
 	{
 		// Tack the email hash onto the end.
 		$emailHash = $this->getEmailHash($email);

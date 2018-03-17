@@ -22,7 +22,6 @@ use Nette;
 use Tester;
 use Tester\Assert;
 
-use IPub;
 use IPub\Gravatar;
 
 require __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'bootstrap.php';
@@ -37,7 +36,7 @@ class GravatarTest extends Tester\TestCase
 	/**
 	 * {@inheritdoc}
 	 */
-	public function setUp()
+	public function setUp() : void
 	{
 		parent::setUp();
 
@@ -47,19 +46,19 @@ class GravatarTest extends Tester\TestCase
 		$this->gravatar = $dic->getService('gravatar.gravatar');
 	}
 
-	public function testGravatarUrlWithDefaultOptions()
+	public function testGravatarUrlWithDefaultOptions() : void
 	{
 		Assert::equal('http://www.gravatar.com/avatar/aabfda88704a1ab55db46d4116442222?s=80&r=g&d=mm', $this->gravatar->buildUrl('john.doe@ipublikuj.eu'));
 	}
 
-	public function testGravatarSecureUrlWithDefaultOptions()
+	public function testGravatarSecureUrlWithDefaultOptions() : void
 	{
 		$this->gravatar->enableSecureImages();
 
 		Assert::equal('https://secure.gravatar.com/avatar/aabfda88704a1ab55db46d4116442222?s=80&r=g&d=mm', $this->gravatar->buildUrl('john.doe@ipublikuj.eu', NULL));
 	}
 
-	public function testGravatarInitializedWithOptions()
+	public function testGravatarInitializedWithOptions() : void
 	{
 		$this->gravatar->setSize(20);
 		$this->gravatar->setMaxRating('g');
@@ -68,7 +67,7 @@ class GravatarTest extends Tester\TestCase
 		Assert::equal('http://www.gravatar.com/avatar/aabfda88704a1ab55db46d4116442222?s=20&r=g&d=mm', $this->gravatar->buildUrl('john.doe@ipublikuj.eu'));
 	}
 
-	public function testGravatarExists()
+	public function testGravatarExists() : void
 	{
 		Assert::false($this->gravatar->exists('fake.email@ipublikuj.eu'));
 		Assert::true($this->gravatar->exists('adam.kadlec@gmail.com'));

@@ -16,8 +16,6 @@ declare(strict_types = 1);
 
 namespace IPub\Gravatar\Exceptions;
 
-use Nette;
-
-class InvalidStateException extends Nette\InvalidStateException implements IException
+class InvalidStateException extends \RuntimeException implements IException
 {
 }

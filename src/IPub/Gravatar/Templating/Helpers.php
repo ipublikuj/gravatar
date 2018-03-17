@@ -56,7 +56,7 @@ final class Helpers
 	 *
 	 * @return string
 	 */
-	public function gravatar(string $email, int $size = NULL) : string
+	public function gravatar(string $email, ?int $size = NULL) : string
 	{
 		return $this->gravatar
 			->buildUrl($email, $size);
