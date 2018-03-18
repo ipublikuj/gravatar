@@ -4,7 +4,7 @@
  *
  * @copyright      More in license.md
  * @license        https://www.ipublikuj.eu
- * @author         Adam Kadlec https://www.ipublikuj.eu
+ * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
  * @package        iPublikuj:Gravatar!
  * @subpackage     common
  * @since          1.0.0
@@ -335,7 +335,7 @@ final class Gravatar
 	 *
 	 * @return Utils\Image
 	 *
-	 * @throws Exceptions\InvalidArgumentException
+	 * @throws Utils\ImageException
 	 */
 	public function get(?string $email = NULL, ?int $size = NULL) : Utils\Image
 	{

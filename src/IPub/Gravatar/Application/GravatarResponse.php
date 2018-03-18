@@ -4,7 +4,7 @@
  *
  * @copyright      More in license.md
  * @license        https://www.ipublikuj.eu
- * @author         Adam Kadlec https://www.ipublikuj.eu
+ * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
  * @package        iPublikuj:Gravatar!
  * @subpackage     Application
  * @since          1.0.0
@@ -52,8 +52,7 @@ final class GravatarResponse implements Nette\Application\IResponse
 	 * @param string $email
 	 * @param int $size 1-512
 	 *
-	 * @thrown Exceptions\InvalidArgumentException
-	 * @thrown Exceptions\InvalidStateException
+	 * @throws Utils\ImageException
 	 */
 	public function __construct(string $email, int $size)
 	{
@@ -66,7 +65,7 @@ final class GravatarResponse implements Nette\Application\IResponse
 			throw new Exceptions\InvalidArgumentException(sprintf('Unsupported size "%s", Gravatar expects "1 - 512".', $size));
 		}
 
-		$path = $this->createUrl($email, $size, 404);
+		$path = $this->createUrl($email, $size, '404');
 
 		if (!$sock = @fsockopen('gravatar.com', 80, $errorNo, $error)) {
 			return NULL;
