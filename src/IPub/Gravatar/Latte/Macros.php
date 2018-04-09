@@ -69,7 +69,7 @@ final class Macros extends MacroSet
 			throw new Latte\CompileException('Please provide email address.');
 		}
 
-		return $writer->write('echo %escape(property_exists($this, "filters") ? call_user_func($this->filters->gravatar, ' . $arguments['email'] . ', ' . $arguments['size'] . ') : $template->getGravatarService()->buildUrl(' . $arguments['email'] . ', ' . $arguments['size'] . '));');
+		return $writer->write('echo %escape(property_exists($this, "filters") ? call_user_func($this->filters->gravatar, ' . $arguments['email'] . ', ' . $arguments['size'] . ', ' . $arguments['maxRating'] . ', ' . $arguments['defaultImage'] . ') : $template->getGravatarService()->buildUrl(' . $arguments['email'] . ', ' . $arguments['size'] . ', ' . $arguments['maxRating'] . ', ' . $arguments['defaultImage'] . '));');
 	}
 
 
@@ -89,7 +89,7 @@ final class Macros extends MacroSet
 			throw new Latte\CompileException('Please provide email address.');
 		}
 
-		return $writer->write('?> ' . ($node->htmlNode->name === 'a' ? 'href' : 'src') . '="<?php echo %escape(property_exists($this, "filters") ? call_user_func($this->filters->gravatar, ' . $arguments['email'] . ', ' . $arguments['size'] . ') : $template->getGravatarService()->buildUrl(' . $arguments['email'] . ', ' . $arguments['size'] . '));?>" <?php');
+		return $writer->write('?> ' . ($node->htmlNode->name === 'a' ? 'href' : 'src') . '="<?php echo %escape(property_exists($this, "filters") ? call_user_func($this->filters->gravatar, ' . $arguments['email'] . ', ' . $arguments['size'] . ', ' . $arguments['maxRating'] . ', ' . $arguments['defaultImage'] . ') : $template->getGravatarService()->buildUrl(' . $arguments['email'] . ', ' . $arguments['size'] . ', ' . $arguments['maxRating'] . ', ' . $arguments['defaultImage'] . '));?>" <?php');
 	}
 
 
@@ -105,11 +105,15 @@ final class Macros extends MacroSet
 		}, explode(',', $macro));
 
 		$name = $arguments[0];
-		$size = (isset($arguments[1]) && !empty($arguments[1])) ? $arguments[1] : NULL;
+		$size = (isset($arguments[1]) && !empty($arguments[1])) ? $arguments[1] : 'NULL';
+		$maxRating = (isset($arguments[2]) && !empty($arguments[2])) ? $arguments[2] : 'NULL';
+		$defaultImage = (isset($arguments[3]) && !empty($arguments[3])) ? $arguments[3] : 'NULL';
 
 		return [
-			'email' => $name,
-			'size'  => $size,
+			'email'        => $name,
+			'size'         => $size,
+			'maxRating'    => $maxRating,
+			'defaultImage' => $defaultImage
 		];
 	}
 }

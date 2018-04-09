@@ -59,11 +59,11 @@ final class Gravatar
 
 	/**
 	 * The default image to use
-	 * Either a string of the gravatar-recognized default image "type" to use, a URL, or FALSE if using the...default gravatar default image (hah)
+	 * Either a string of the gravatar-recognized default image "type" to use, a URL, or NULL if using the...default gravatar default image (hah)
 	 *
 	 * @var mixed
 	 */
-	private $defaultImage = FALSE;
+	private $defaultImage = NULL;
 
 	/**
 	 * The maximum rating to allow for the avatar.
@@ -200,7 +200,7 @@ final class Gravatar
 	{
 		// Quick check against boolean FALSE.
 		if ($image === FALSE) {
-			$this->defaultImage = FALSE;
+			$this->defaultImage = NULL;
 
 		} else {
 			// Check $image against recognized gravatar "defaults"
@@ -442,11 +442,13 @@ final class Gravatar
 			$size = $this->getSize();
 		}
 
+		$defaultImage = $this->getDefaultImage($defaultImage);
+
 		// Time to figure out our request params
 		$params = [
 			's' => $size,
 			'r' => $this->getMaxRating($maxRating),
-			'd' => $this->getDefaultImage($defaultImage),
+			'd' => $defaultImage === NULL ? FALSE : $defaultImage,
 			'f' => is_null($email) ? 'y' : NULL,
 		];
 
