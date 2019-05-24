@@ -1,8 +1,8 @@
 # Gravatar
 
-[![Build Status](https://img.shields.io/travis/iPublikuj/gravatar.svg?style=flat-square)](https://travis-ci.org/iPublikuj/gravatar)
-[![Scrutinizer Code Coverage](https://img.shields.io/scrutinizer/coverage/g/iPublikuj/gravatar.svg?style=flat-square)](https://scrutinizer-ci.com/g/iPublikuj/gravatar/?branch=master)
-[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/iPublikuj/gravatar.svg?style=flat-square)](https://scrutinizer-ci.com/g/iPublikuj/gravatar/?branch=master)
+[![Build Status](https://img.shields.io/travis/ipublikuj-ui/gravatar.svg?style=flat-square)](https://travis-ci.org/ipublikuj-ui/gravatar)
+[![Scrutinizer Code Coverage](https://img.shields.io/scrutinizer/coverage/g/ipublikuj-ui/gravatar.svg?style=flat-square)](https://scrutinizer-ci.com/g/ipublikuj-ui/gravatar/?branch=master)
+[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/ipublikuj-ui/gravatar.svg?style=flat-square)](https://scrutinizer-ci.com/g/ipublikuj-ui/gravatar/?branch=master)
 [![Latest Stable Version](https://img.shields.io/packagist/v/ipub/gravatar.svg?style=flat-square)](https://packagist.org/packages/ipub/gravatar)
 [![Composer Downloads](https://img.shields.io/packagist/dt/ipub/gravatar.svg?style=flat-square)](https://packagist.org/packages/ipub/gravatar)
 [![License](https://img.shields.io/packagist/l/ipub/gravatar.svg?style=flat-square)](https://packagist.org/packages/ipub/gravatar)
