@@ -43,7 +43,18 @@ final class GravatarExtension extends DI\CompilerExtension
 		'defaultImage' => FALSE
 	];
 
-	/**
+    /**
+     * @return Nette\Schema\Schema
+     */
+	public function getConfigSchema(): Nette\Schema\Schema {
+        return Nette\Schema\Expect::structure([
+            'expiration' => Nette\Schema\Expect::int($this->defaults['expiration']),
+            'size' => Nette\Schema\Expect::int($this->defaults['size']),
+            'defaultImage' => Nette\Schema\Expect::bool($this->defaults['defaultImage']),
+        ])->castTo('array');
+    }
+
+    /**
 	 * @return void
 	 */
 	public function loadConfiguration() : void
@@ -51,7 +62,7 @@ final class GravatarExtension extends DI\CompilerExtension
 		// Get container builder
 		$builder = $this->getContainerBuilder();
 		// Get extension configuration
-		$configuration = $this->getConfig($this->defaults);
+		$configuration = $this->getConfig();
 
 		// Install Gravatar service
 		$builder->addDefinition($this->prefix('gravatar'))
@@ -64,13 +75,14 @@ final class GravatarExtension extends DI\CompilerExtension
 		$builder->addDefinition($this->prefix('cache'))
 			->setType(Caching\Cache::class)
 			->setArguments(['@cacheStorage', 'IPub.Gravatar'])
-			->setInject(FALSE);
+            ->addTag(DI\Extensions\InjectExtension::TAG_INJECT);
 
 		// Register template helpers
 		$builder->addDefinition($this->prefix('helpers'))
 			->setType(Templating\Helpers::class)
 			->setFactory($this->prefix('@gravatar') . '::createTemplateHelpers')
-			->setInject(FALSE);
+            ->addTag(DI\Extensions\InjectExtension::TAG_INJECT);
+			//->setInject(FALSE);
 	}
 
 	/**
@@ -87,6 +99,7 @@ final class GravatarExtension extends DI\CompilerExtension
 		$latteFactory = $builder->getDefinition($builder->getByType(Bridges\ApplicationLatte\ILatteFactory::class) ?: 'nette.latteFactory');
 
 		$latteFactory
+            ->getResultDefinition()
 			->addSetup('IPub\Gravatar\Latte\Macros::install(?->getCompiler())', ['@self'])
 			->addSetup('addFilter', ['gravatar', [$this->prefix('@helpers'), 'gravatar']])
 			->addSetup('addFilter', ['getGravatarService', [$this->prefix('@helpers'), 'getGravatarService']]);
